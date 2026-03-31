@@ -3,11 +3,11 @@
   "private": true,
   "version": "0.0.60",
   "scripts": {
-    "lint": "npx eslint --ext .js,.ts,.vue --fix",
+    "lint": "npx eslint --ext .js,.ts,.vue",
     "type-check": "vue-tsc --noEmit",
-    "build": "npx @lightspeed/crane@latest build",
-    "preview": "npx @lightspeed/crane@latest preview",
-    "deploy": "npx @lightspeed/crane@latest deploy",
+    "build": "crane build",
+    "preview": "crane preview",
+    "deploy": "crane deploy",
     "release": "standard-version --path ."
   },
   "dependencies": {

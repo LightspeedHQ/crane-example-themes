@@ -17,21 +17,23 @@ export default {
 						type: 'IMAGE',
 						label: '$label.gallery_item_image.label',
 						defaults: {
-							set: {
-								MOBILE_WEBP_LOW_RES: {
-									url: 'image-1.png',
+							imageData: {
+								set: {
+									MOBILE_WEBP_LOW_RES: {
+										url: 'image-1.png',
+									},
+									MOBILE_WEBP_HI_RES: {
+										url: 'image-1.png',
+									},
+									WEBP_LOW_RES: {
+										url: 'image-1.png',
+									},
+									WEBP_HI_2X_RES: {
+										url: 'image-1.png',
+									},
 								},
-								MOBILE_WEBP_HI_RES: {
-									url: 'image-1.png',
-								},
-								WEBP_LOW_RES: {
-									url: 'image-1.png',
-								},
-								WEBP_HI_2X_RES: {
-									url: 'image-1.png',
-								},
+								borderInfo: {},
 							},
-							borderInfo: {},
 						},
 					},
 					alt_text: {

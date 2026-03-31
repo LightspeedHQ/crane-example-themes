@@ -22,13 +22,17 @@ export default {
 						description: '$label.description',
 						label: '$label.reviewed_by_you.reviewer_name.label',
 						placeholder: '$label.reviewed_by_you.reviewer_name.placeholder',
-						text: '$label.reviewed_by_you.reviewer_name.default',
+						defaults: {
+							text: '$label.reviewed_by_you.reviewer_name.default',
+						},
 					},
 					reviewText: {
 						type: 'TEXTAREA',
 						label: '$label.reviewed_by_you.review_text.label',
 						placeholder: '$label.reviewed_by_you.review_text.placeholder',
-						text: '$label.reviewed_by_you.review_text.default',
+						defaults: {
+							text: '$label.reviewed_by_you.review_text.default',
+						},
 					},
 					rating: {
 						type: 'SELECTBOX',
