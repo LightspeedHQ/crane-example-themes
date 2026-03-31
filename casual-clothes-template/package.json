@@ -1,7 +1,7 @@
 {
   "name": "casual-clothes-template",
   "private": true,
-  "version": "0.0.59",
+  "version": "0.0.60",
   "scripts": {
     "lint": "npx eslint --ext .js,.ts,.vue --fix",
     "type-check": "vue-tsc --noEmit",
@@ -11,13 +11,13 @@
     "release": "standard-version --path ."
   },
   "dependencies": {
-    "@lightspeed/crane": "^2.0.3",
-    "@lightspeed/ecom-headless": "^1.1.2",
-    "@lightspeed/crane-api": "1.0.2",
+    "@lightspeed/crane": "^3.2.1",
+    "@lightspeed/crane-api": "^2.2.1",
+    "@lightspeed/ecom-headless": "^1.1.3",
     "@lightspeed/eslint-config-crane": "^1.1.3",
     "@vueuse/core": "^14.1.0",
-    "vite": "^7.3.0",
-    "vue": "^3.5.26"
+    "vite": "^7.3.1",
+    "vue": "^3.5.31"
   },
   "engines": {
     "node": ">=22"
@@ -36,8 +36,8 @@
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-unused-imports": "^4.3.0",
     "eslint-plugin-vue": "^10.6.2",
-    "prettier": "^3.7.4",
-    "sass": "^1.96.0",
+    "prettier": "^3.8.1",
+    "sass": "^1.98.0",
     "standard-version": "^9.5.0",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.1.8"
