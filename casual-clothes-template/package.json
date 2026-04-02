@@ -26,7 +26,7 @@
     "glob": "^9.3.5",
     "stylus": "^0.63.0",
     "axios-concurrency": {
-      "axios": "^1.13.2"
+      "axios": "1.13.2"
     }
   },
   "devDependencies": {
