@@ -1,6 +1,6 @@
 import { BaseCard } from '../../../shared/types/type.ts'
 import {
-	ButtonContent,
+	ButtonContentData,
 	EditorTypes, ImageContent,
 	InputBoxContent,
 	SelectBoxContent,
@@ -9,7 +9,7 @@ import { createFieldConfig, field } from '../../../shared/composables'
 import { ComputedRef, InjectionKey } from 'vue'
 
 interface LinksGroup extends BaseCard {
-    buttonLink?: ButtonContent;
+    buttonLink?: ButtonContentData;
 }
 
 export const LinksGroupDeckConfig = createFieldConfig({
@@ -38,8 +38,8 @@ interface LinksGroupContext {
 interface SiteInfoContext {
     copyrightNotice: InputBoxContent,
     contactUsTitle: InputBoxContent,
-    contactUsTelephone: ButtonContent,
-    contactUsMail: ButtonContent,
+    contactUsTelephone: ButtonContentData,
+    contactUsMail: ButtonContentData,
     legalAndTechnicalLinks: ComputedRef<LinksGroup[]>
     socialMediaLinks: ComputedRef<SocialMediaLink[]>
 }

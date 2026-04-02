@@ -218,21 +218,23 @@ export default {
 		type: 'IMAGE',
 		label: '$label.catalog_promo_image.label',
 		defaults: {
-			set: {
-				MOBILE_WEBP_LOW_RES: {
-					url: 'example-promo-banner.png',
+			imageData: {
+				set: {
+					MOBILE_WEBP_LOW_RES: {
+						url: 'example-promo-banner.png',
+					},
+					MOBILE_WEBP_HI_RES: {
+						url: 'example-promo-banner.png',
+					},
+					WEBP_LOW_RES: {
+						url: 'example-promo-banner.png',
+					},
+					WEBP_HI_2X_RES: {
+						url: 'example-promo-banner.png',
+					},
 				},
-				MOBILE_WEBP_HI_RES: {
-					url: 'example-promo-banner.png',
-				},
-				WEBP_LOW_RES: {
-					url: 'example-promo-banner.png',
-				},
-				WEBP_HI_2X_RES: {
-					url: 'example-promo-banner.png',
-				},
+				borderInfo: {},
 			},
-			borderInfo: {},
 		},
 	},
 

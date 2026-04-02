@@ -24,6 +24,7 @@ A production-ready example template for [Crane](https://www.npmjs.com/package/@l
 # Clone the repository
 git clone https://github.com/LightspeedHQ/crane-example-themes.git
 cd crane-example-themes
+cd casual-clothes-template
 
 # Install dependencies
 npm install
