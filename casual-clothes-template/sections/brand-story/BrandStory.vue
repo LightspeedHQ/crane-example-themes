@@ -2,8 +2,13 @@
 	<SectionWrapper :style="sectionBackgroundStyle">
 		<div class="brand-story">
 			<div v-if="!hasError" class="brand-story__hero-container">
-				<VideoPlayer :video-url="videoUrl" />
-				<PlayButton :video-url="videoUrl" />
+				<VideoPlayer :player-id="playerId" :has-played-once="hasPlayedOnce" />
+				<PlayButton
+					:is-playing="isPlaying"
+					:has-played-once="hasPlayedOnce"
+					:is-client="isClient"
+					:toggle-play="togglePlay"
+				/>
 			</div>
 
 			<StoryContent />
@@ -16,29 +21,29 @@ import { computed } from 'vue'
 import {
 	useInputboxElementContent,
 	useBackgroundElementDesign,
+	useVueBaseProps,
 } from '@lightspeed/crane'
 import { Content, Design } from './type'
 import SectionWrapper from '../../shared/components/SectionWrapper.vue'
 import { useYouTubePlayer } from './composables/use-youtube-player.ts'
-import { useBackgroundStyle } from '../../shared/composables'
+import { createBackgroundVars } from '../../shared/utils/design-vars'
+import { useColorPresetVars } from '../../shared/composables/design'
 import { extractYouTubeId } from './utils/utils.ts'
 import PlayButton from './components/PlayButton.vue'
 import StoryContent from './components/StoryContent.vue'
 import VideoPlayer from './components/VideoPlayer.vue'
 
-// Content
+const { design: rawDesign } = useVueBaseProps<unknown, Design>()
 const videoUrlRaw = useInputboxElementContent<Content>('video_url')
-
-// Design
 const sectionBackgroundDesign = useBackgroundElementDesign<Design>('section_background') as BackgroundDesignData
+const colorPresetVars = useColorPresetVars(rawDesign)
 
 const videoUrl = computed(() => extractYouTubeId(videoUrlRaw.value))
-
-// YouTube player (client-only)
-const { hasError } = useYouTubePlayer(videoUrl)
-
-// Background style using shared composable
-const sectionBackgroundStyle = useBackgroundStyle(sectionBackgroundDesign)
+const { playerId, isPlaying, hasPlayedOnce, isClient, togglePlay, hasError } = useYouTubePlayer(videoUrl)
+const sectionBackgroundStyle = computed(() => ({
+	...Object.fromEntries(createBackgroundVars('section', sectionBackgroundDesign, rawDesign.value?.section_background)),
+	...colorPresetVars.value,
+}))
 
 </script>
 <style scoped lang="scss">

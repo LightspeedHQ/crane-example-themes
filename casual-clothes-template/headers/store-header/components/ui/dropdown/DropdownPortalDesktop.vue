@@ -2,7 +2,11 @@
 	<div
 		@mouseenter="handleHoverTrigger"
 		@mouseleave="handleUnHoverTrigger">
-		<div ref="triggerRef" >
+		<div
+			ref="triggerRef"
+			@focusin="handleTriggerFocusIn"
+			@focusout="handleFocusOut"
+			@keydown="handleTriggerKeydown">
 			<slot
 				name="trigger"
 			/>
@@ -21,6 +25,7 @@
 				@mouseleave="handleUnHoverBridge"
 			/>
 			<div
+				ref="contentRef"
 				v-show="isDropdownOpen"
 				class="teleported"
 				:style="{
@@ -28,6 +33,8 @@
 				}"
 				@mouseenter="handleHoverContent"
 				@mouseleave="handleUnHoverContent"
+				@focusout="handleFocusOut"
+				@keydown="handleContentKeydown"
 			>
 				<slot name="content" />
 			</div>
@@ -51,6 +58,7 @@ interface ContentCoordinates {
 const isDropdownOpen = defineModel<boolean>({ default: false })
 
 const triggerRef = ref<HTMLElement | null>(null)
+const contentRef = ref<HTMLElement | null>(null)
 
 const isHoveringTrigger = ref(false)
 const isHoveringContent = ref(false)
@@ -67,7 +75,6 @@ const contentStyle = shallowRef<ContentCoordinates | null>(null)
 const bridgeStyle = shallowRef<ContentCoordinates | null>(null)
 const scrollY = shallowRef<number>(0)
 const computeCoords = () => {
-	console.log('computing')
 	const trigger = triggerRef.value
 	if (!trigger) return
 
@@ -102,7 +109,80 @@ watch([isHoveringTrigger, isHoveringContent, isHoveringBridge], () => {
 	closeDropdownDebounced()
 })
 
-useEscapeKey(()=> {isDropdownOpen.value = false})
+// Keyboard focus support
+const focusableSelector = 'a[href], button:not([disabled])'
+
+// Open on focusin, focus stays on the trigger link
+const handleTriggerFocusIn = () => {
+	if (!isDropdownOpen.value) {
+		isDropdownOpen.value = true
+		computeCoords()
+	}
+}
+
+// Close when focus leaves both trigger and content
+const handleFocusOut = (event: FocusEvent) => {
+	const relatedTarget = event.relatedTarget as Node | null
+	if (triggerRef.value?.contains(relatedTarget)) return
+	if (contentRef.value?.contains(relatedTarget)) return
+	isDropdownOpen.value = false
+}
+
+// Tab from trigger → move focus into first content link
+const handleTriggerKeydown = (event: KeyboardEvent) => {
+	if (event.key !== 'Tab' || event.shiftKey || !isDropdownOpen.value) return
+	const firstFocusable = contentRef.value?.querySelector<HTMLElement>(focusableSelector)
+	if (firstFocusable) {
+		event.preventDefault()
+		firstFocusable.focus()
+	}
+}
+
+// Find the next focusable element in the document after the trigger
+const focusNextAfterTrigger = () => {
+	// eslint-disable-next-line no-restricted-globals -- SSR-safe: called from keydown handler
+	if (typeof document === 'undefined') return
+	// eslint-disable-next-line no-restricted-globals -- SSR-safe: guarded above
+	const allFocusables = Array.from(document.querySelectorAll<HTMLElement>(focusableSelector))
+		.filter(el => (el.offsetWidth > 0 || el.offsetHeight > 0) && !contentRef.value?.contains(el))
+	const triggerFocusables = allFocusables.filter(el => triggerRef.value?.contains(el))
+	const lastTrigger = triggerFocusables[triggerFocusables.length - 1]
+	// Guard: if the trigger slot contains no focusable elements, do nothing
+	if (!lastTrigger) return
+	const lastTriggerIdx = allFocusables.indexOf(lastTrigger)
+	if (lastTriggerIdx === -1) return
+	allFocusables[lastTriggerIdx + 1]?.focus()
+}
+
+// Shift+Tab from first content link → back to trigger
+// Tab from last content link → next menu item after trigger
+const handleContentKeydown = (event: KeyboardEvent) => {
+	if (event.key !== 'Tab') return
+	// eslint-disable-next-line no-restricted-globals -- SSR-safe: called from keydown handler
+	if (typeof document === 'undefined') return
+	const focusables = Array.from(
+		contentRef.value?.querySelectorAll<HTMLElement>(focusableSelector) ?? [],
+	)
+	if (!focusables.length) return
+	// eslint-disable-next-line no-restricted-globals -- SSR-safe: guarded above
+	const active = document.activeElement
+	if (event.shiftKey && active === focusables[0]) {
+		event.preventDefault()
+		triggerRef.value?.querySelector<HTMLElement>(focusableSelector)?.focus()
+	} else if (!event.shiftKey && active === focusables[focusables.length - 1]) {
+		event.preventDefault()
+		isDropdownOpen.value = false
+		focusNextAfterTrigger()
+	}
+}
+
+useEscapeKey(
+	() => {
+		isDropdownOpen.value = false
+		triggerRef.value?.querySelector<HTMLElement>(focusableSelector)?.focus()
+	},
+	() => isDropdownOpen.value,
+)
 </script>
 
 <style scoped lang="scss">

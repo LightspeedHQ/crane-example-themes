@@ -18,12 +18,11 @@
 import { computed } from 'vue'
 import { useImageElementContent, useButtonElementContent, useToggleElementDesign } from '@lightspeed/crane'
 import type { Content, Design } from '../../type'
-import { useHeaderDesign, useHeaderTranslations } from '../../composables'
+import { useHeaderDesign, useHeaderTranslations, useHeaderState } from '../../composables'
 import ForwardArrowIcon from '../../assets/forward-arrow.svg?raw'
+import { hasValidImageContent } from '../../../../shared/utils'
 
-const emit = defineEmits<{
-  (e: 'close'): void;
-}>()
+const { closeCatalog } = useHeaderState()
 
 // Promo banner visibility toggle
 const catalogPromoBannerVisibility = useToggleElementDesign<Design>('CatalogPromoBannerVisibility')
@@ -32,16 +31,12 @@ const catalogPromoBannerVisibility = useToggleElementDesign<Design>('CatalogProm
 const promoImage = useImageElementContent<Content>('CatalogPromoImage')
 const promoLink = useButtonElementContent<Content>('CatalogPromoLink')
 
-const { headerTextColor, headerFontFamily, headerFontSize } = useHeaderDesign()
+const { headerTextColor } = useHeaderDesign()
 const { translate } = useHeaderTranslations()
 
 const promoImageAlt = translate('$label.aria.promo_image', 'Promotional image')
 
-// Helper to check if image URL is valid
-const hasValidImage = computed(() => {
-	const imageUrl = promoImage.highResolutionDesktopImage
-	return !!(imageUrl && imageUrl !== '/undefined' && !imageUrl.includes('undefined'))
-})
+const hasValidImage = computed(() => promoImage.hasContent && hasValidImageContent(promoImage))
 
 const hasPromoContent = computed(() => {
 	// Check if the promo banner is enabled
@@ -62,7 +57,7 @@ const handlePromoClick = () => {
 	if (promoLink?.performAction) {
 		promoLink.performAction()
 	}
-	emit('close')
+	closeCatalog()
 }
 </script>
 
@@ -130,8 +125,8 @@ const handlePromoClick = () => {
   align-items: center;
   justify-content: space-between;
   color: v-bind(headerTextColor);
-  font-family: v-bind(headerFontFamily);
-  font-size: v-bind(headerFontSize);
+  font-family: var(--header-font-family, var(--body-font-family));
+  font-size: inherit;
   font-style: inherit;
   font-weight: 400; /* Regular weight per Figma design */
   line-height: 150%;

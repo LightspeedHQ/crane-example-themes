@@ -172,7 +172,7 @@ export default {
 			email: 'example@gmail.com',
 			buttonType: 'MAIL_LINK',
 		},
-		copyrightNotice:{
+		copyrightNotice: {
 			type: 'INPUTBOX',
 			text: '$label.copyrightNotice.section_title',
 		},
@@ -252,7 +252,6 @@ export default {
 						},
 					},
 				},
-
 			],
 		},
 		footer_image: {
@@ -275,7 +274,7 @@ export default {
 				borderInfo: {},
 			},
 		},
-		footer_text:{
+		footer_text: {
 			type: 'INPUTBOX',
 			text: '$label.footer_text.text',
 		},
@@ -283,35 +282,21 @@ export default {
 	design: {
 		title: {
 			type: 'TEXT',
-			font: 'inter',
-			size: 16,
 			bold: true,
-			italic: false,
-			color: '#1E1E21',
 			visible: true,
 		},
 		link: {
 			type: 'TEXT',
-			font: 'inter',
-			size: 16,
-			bold: false,
-			italic: false,
-			color: '#1E1E21',
 			visible: true,
 		},
 		footer_text: {
 			type: 'TEXT',
-			font: 'inter',
-			size: 10,
 			bold: false,
 			italic: false,
-			color: '#EEE',
 			visible: true,
 		},
 		background: {
 			type: 'BACKGROUND',
-			style: 'COLOR',
-			color: '#FFFFFF',
 		},
 		isLinksGroup: {
 			type: 'TOGGLE',

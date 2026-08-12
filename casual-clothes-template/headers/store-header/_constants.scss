@@ -1,18 +1,40 @@
 /**
+ * Layout and Display Limits
+ * Mirrors SUBMENU_COLUMN_LIMIT in constants.ts.
+ */
+$SUBMENU_COLUMN_LIMIT: 4;
+
+/**
+ * Total grid columns = $SUBMENU_COLUMN_LIMIT subcategory columns + 1 fixed promo banner column.
+ * Mirrors SUBMENU_GRID_COLUMNS in constants.ts.
+ */
+$SUBMENU_GRID_COLUMNS: $SUBMENU_COLUMN_LIMIT + 1;
+
+/**
  * Z-Index Layers
- * Note: FullScreenOverlay uses 9999, so we need to be higher
+ * Note: FullScreenOverlay uses 9999, so we need to be higher.
+ * Mirrors Z_INDEX_CATALOG_OVERLAY / Z_INDEX_CATALOG_CONTENT in constants.ts.
  */
 $Z_INDEX_CATALOG_OVERLAY: 10000;
 $Z_INDEX_CATALOG_CONTENT: 10001;
 
 /**
- * Layout Positions
+ * Row Heights
+ * Height of each header row: KeyInfoBar, HeaderTopRow, HeaderBottomRow.
+ * Mirrors HEADER_ROW_HEIGHT in constants.ts.
  */
-$CATALOG_SUBMENU_TOP_OFFSET: 118px;
+$HEADER_ROW_HEIGHT: 40px;
+
+/**
+ * Layout Positions
+ * Formula: KeyInfoBar + HeaderTopRow + HeaderBottomRow - 2px borders.
+ * Mirrors CATALOG_SUBMENU_TOP_OFFSET in constants.ts.
+ */
+$CATALOG_SUBMENU_TOP_OFFSET: $HEADER_ROW_HEIGHT * 3 - 2px;
 
 /**
  * Breakpoints
+ * Mirrors MOBILE_STORE_HEADER_BREAKPOINT / MOBILE_MAX_WIDTH in constants.ts.
  */
 $MOBILE_STORE_HEADER_BREAKPOINT: 992px;
 $MOBILE_MAX_WIDTH: 768px;
-

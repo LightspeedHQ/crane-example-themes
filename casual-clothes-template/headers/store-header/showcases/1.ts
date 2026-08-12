@@ -20,7 +20,6 @@ export default {
 		},
 		menu: {
 			type: 'NAVIGATION_MENU',
-			text: '$label.showcase_1.menu.text',
 		},
 		HeaderLocationsLink: {
 			type: 'INPUTBOX',
@@ -208,7 +207,6 @@ export default {
 		KeyInfoBarText: {
 			type: 'TEXT',
 			font: 'global.fontFamily.body',
-			size: 14,
 			bold: false,
 			italic: false,
 			color: '#FFFFFF',
@@ -220,16 +218,14 @@ export default {
 		},
 		logo: {
 			type: 'LOGO',
-			font: 'global.fontFamily.body',
 			size: 20,
 			bold: true,
-			italic: true,
-			color: '#313131',
+			italic: false,
 			visible: true,
 			spacing: 2,
 			capitalization: 'none',
 			frame: {
-				visible: true,
+				visible: false,
 				width: 3,
 				color: '#313131',
 			},

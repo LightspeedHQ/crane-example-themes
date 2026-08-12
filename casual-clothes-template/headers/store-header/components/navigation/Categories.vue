@@ -7,12 +7,14 @@
 						:class="[isDesktop ? '' : 'categories-menu__item_containerBottom'
 							, 'categories-menu__item_containerRight']"
 						:style="{ display: 'flex', alignItems: 'center' }"
-						@click="handleCategoryClick($event, levelOneCategory)">
+						@click="handleCategoryClick($event, levelOneCategory)"
+						@mouseenter="maybeCloseSearchOverlay">
 						<NavigationLink
 							class="categories-menu__item categories-menu__link categories-menu__link--submenu"
 							:class="{ 'categories-menu__link--active': isActiveCategory(levelOneCategory),
 								'navigation-menu__item--active': isDropdownOpen}"
 							:aria-label="getOpenSubmenuLabel(levelOneCategory.name)"
+							:aria-expanded="isDropdownOpen"
 							:text="levelOneCategory.name"
 							:url="levelOneCategory.urlPath || '#'"
 							:is-bold="true"
@@ -50,33 +52,35 @@
 
 <script setup lang="ts">
 import NavigationLink from '../ui/navigation-link'
-import type { Category, OpenCatalogEmits } from '../../types'
+import type { Category } from '../../types'
 import type { ActiveCategoryProps } from '../../types'
-import { useCategoryTree, useHeaderDesign, useHeaderTranslations, useHeaderViewport } from '../../composables'
+import { useCategoryTree, useHeaderDesign, useHeaderTranslations, useHeaderViewport, useHeaderState } from '../../composables'
 import SubCategoryDropdownContent from './SubCategoryDropdownContent.vue'
 import { DropdownPortalMenu } from '../ui/dropdown'
 import { DropdownArrowIcon } from '../ui/icons'
 
 const props = defineProps<ActiveCategoryProps>()
 
-const emit = defineEmits<OpenCatalogEmits & { (e: 'close-catalog'): void }>()
+const { openCatalog, isSearchOverlayOpen, closeSearchOverlay } = useHeaderState()
 const { isDesktop } = useHeaderViewport()
 
 const handleCategoryClick = (event: MouseEvent, levelOneCategory: Category) => {
 	if (!isDesktop.value) {
-		// Prevent navigation on mobile - only open submenu
 		event.preventDefault()
 		event.stopPropagation()
-		emit('open-catalog', levelOneCategory)
+		openCatalog(levelOneCategory)
 	}
-	// On desktop, dropdown handles the interaction
 }
-//end
+
+function maybeCloseSearchOverlay() {
+	if (isSearchOverlayOpen.value && isDesktop.value) {
+		closeSearchOverlay()
+	}
+}
 
 const { visibleCategories } = useCategoryTree()
 const { translate } = useHeaderTranslations()
 
-// SSR-safe viewport detection
 const { headerBackgroundColor } = useHeaderDesign()
 
 const getOpenSubmenuLabel = (categoryName: string): string => {

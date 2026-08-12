@@ -3,14 +3,15 @@
 		:is-open="isOpen"
 		:background-color="headerBackgroundColor"
 		:text-color="headerTextColor"
-		@close="$emit('close')"
+		:preset-vars="headerPresetVars"
+		@close="closeMobileCatalogOverlay"
 	>
 		<div class="catalog-overlay">
 			<div class="catalog-overlay__header">
 				<button
 					class="catalog-overlay__close"
 					:aria-label="closeCatalogLabel"
-					@click="$emit('close')"
+					@click="closeMobileCatalogOverlay"
 				>
 					<span class="catalog-overlay__close-icon" v-html="CloseIcon"></span>
 				</button>
@@ -19,11 +20,11 @@
 
 			<div class="catalog-overlay__content">
 				<div class="catalog-overlay__categories">
-					<Categories @open-catalog="$emit('open-catalog', $event)" />
+					<Categories />
 				</div>
 
 				<div class="catalog-overlay__promo">
-					<CatalogPromoBanner @close="$emit('close')" />
+					<CatalogPromoBanner />
 				</div>
 			</div>
 		</div>
@@ -35,15 +36,16 @@ import Search from '../user/Search.vue'
 import Categories from '../navigation/Categories.vue'
 import CatalogPromoBanner from '../catalog/CatalogPromoBanner.vue'
 import { FullScreenOverlay } from '../ui/overlay'
-import type { OverlayProps, CatalogOverlayEmits } from '../../types/common'
-import { useHeaderToggles, useHeaderDesign, useHeaderTranslations } from '../../composables'
+import type { OverlayProps } from '../../types/common'
+import { useHeaderToggles, useHeaderDesign, useHeaderTranslations, useHeaderState } from '../../composables'
 import CloseIcon from '../../../../shared/assets/close-icon.svg?raw'
 
 defineProps<OverlayProps>()
-defineEmits<CatalogOverlayEmits>()
+
+const { closeMobileCatalogOverlay } = useHeaderState()
 
 const { searchShow } = useHeaderToggles()
-const { headerBackgroundColor, headerTextColor } = useHeaderDesign()
+const { headerBackgroundColor, headerTextColor, headerPresetVars } = useHeaderDesign()
 const { translate } = useHeaderTranslations()
 const closeCatalogLabel = translate('$label.aria.close_catalog', 'Close catalog')
 </script>

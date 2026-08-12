@@ -1,5 +1,5 @@
 import { computed, type ComputedRef, ref, onMounted } from 'vue'
-import { searchCategories, type Category as ApiCategory } from '@lightspeed/ecom-headless'
+import { searchCategories, type Category as EcwidCategory } from '@lightspeed/ecom-headless'
 import { useVueBaseProps } from '@lightspeed/crane'
 import { useInitStorefrontApi } from '../../../../shared/init-storefront-api'
 import { getCurrentLanguageCode } from '../../../../shared/utils/use-current-language'
@@ -7,7 +7,7 @@ import { getDefaultLanguageCode } from '../../../../shared/utils/language'
 import type { Category } from '../../types/category'
 import { CATEGORY_MENU_LIMIT, SUBMENU_COLUMN_LIMIT } from '../../constants'
 
-type FullCategory = ApiCategory & { parentId?: number }
+type FullCategory = EcwidCategory & { parentId?: number }
 
 /**
  * Add language prefix to URL path if needed
@@ -20,21 +20,21 @@ function addLanguagePrefixToUrl(url: string | undefined, language: string | unde
 	if (!url || !language) {
 		return url
 	}
-
+	
 	// Skip if it's the default language (no prefix needed)
 	if (language === defaultLanguage) {
 		return url
 	}
-
+	
 	try {
 		const urlObj = new URL(url)
 		const path = urlObj.pathname
-
+		
 		// Check if language prefix already exists
 		if (path.startsWith(`/${language}/`)) {
 			return url
 		}
-
+		
 		// Add language prefix
 		urlObj.pathname = `/${language}${path}`
 		return urlObj.toString()
@@ -46,7 +46,7 @@ function addLanguagePrefixToUrl(url: string | undefined, language: string | unde
 
 /**
  * Build nested category tree from flat API response
- * When you request categories with a language parameter (lang: 'de'), the API returns:
+ * When you request categories with a language parameter (lang: 'de'), the Ecwid API returns:
  * - name: The translated name in the requested language
  * - url: The category URL WITHOUT language prefix - we need to add it
  */
@@ -72,7 +72,7 @@ function buildCategoryTree(flatCategories: FullCategory[], language?: string, de
 	// Second pass: Build parent-child relationships
 	flatCategories.forEach(cat => {
 		const category = categoryMap.get(cat.id)!
-
+		
 		if (cat.parentId) {
 			const parent = categoryMap.get(cat.parentId)
 			if (parent) {
@@ -85,7 +85,7 @@ function buildCategoryTree(flatCategories: FullCategory[], language?: string, de
 			rootCategories.push(category)
 		}
 	})
-
+	
 	return rootCategories
 }
 
@@ -132,13 +132,13 @@ export function useCategoryTree() {
 		try {
 			await useInitStorefrontApi()
 			const baseProps = useVueBaseProps()
-
+			
 			// Get default language from site data
 			defaultLanguage.value = getDefaultLanguageCode(baseProps.site?.value?.languages)
-
+			
 			// Get language from baseProps first
 			let language = getCurrentLanguageCode(baseProps.site?.value?.languages)
-
+			
 			// FALLBACK: If site data isn't loaded yet, parse language from URL
 			// Headers load before site data, so we need this fallback
 			// eslint-disable-next-line no-restricted-globals -- SSR-safe: guarded by typeof check
@@ -152,10 +152,10 @@ export function useCategoryTree() {
 					language = possibleLang
 				}
 			}
-
+			
 			// Store language for use in computed
 			currentLanguage.value = language
-
+			
 			const response = await searchCategories({ lang: language })
 			rawCategories.value = (response.items || []) as FullCategory[]
 		} catch (error) {

@@ -1,9 +1,11 @@
 <template>
 	<button
-		v-if="isClient && !hasPlayedOnce"
+		v-if="isClient"
+		v-show="playButtonDesign?.visible !== false"
 		class="brand-story__play-button"
-		:style="playButtonStyle"
-		@click="togglePlay">
+		:style="playButtonVars"
+		@click="togglePlay"
+	>
 		<div class="brand-story__play-text">
 			<span class="brand-story__play-text--mobile">{{ mobilePlayText }}</span>
 			<span class="brand-story__play-text--desktop">{{ desktopPlayText }}</span>
@@ -15,77 +17,103 @@
 <script setup lang="ts">
 import PlayIcon from '../assets/play-icon.svg?raw'
 import PauseIcon from '../assets/pause-icon.svg?raw'
-import { useYouTubePlayer } from '../composables/use-youtube-player.ts'
-import { computed, ref } from 'vue'
-import { useButtonElementDesign, useInputboxElementContent } from '@lightspeed/crane'
+import { computed } from 'vue'
+import {
+	useButtonElementDesign,
+	useInputboxElementContent,
+	useVueBaseProps,
+} from '@lightspeed/crane'
 import { Content, Design } from '../type.ts'
-import { useButtonStyles } from '../../../shared/composables'
+import { createButtonVars } from '../../../shared/utils/design-vars'
 
 const props = defineProps<{
-	videoUrl: string
+	isPlaying: boolean
+	hasPlayedOnce: boolean
+	isClient: boolean
+	togglePlay: () => void
 }>()
 
-// YouTube player (client-only)
-const { isPlaying, hasPlayedOnce, isClient, togglePlay } = useYouTubePlayer(ref(props.videoUrl))
+const { design: rawDesign } = useVueBaseProps<unknown, Design>()
 
 const playButtonText = useInputboxElementContent<Content>('play_button_text')
 const pauseButtonText = useInputboxElementContent<Content>('pause_button_text')
 const watchVideoText = useInputboxElementContent<Content>('watch_video_text')
 
 const playButtonDesign = useButtonElementDesign<Design>('play_button')
-// Use shared button styling composable
-const playButtonStyle = useButtonStyles(playButtonDesign)
-// Button text from content
-const mobilePlayText = computed(() => isPlaying.value ? pauseButtonText.value : watchVideoText.value)
-const desktopPlayText = computed(() => isPlaying.value ? pauseButtonText.value : playButtonText.value)
+
+const playButtonVars = computed(() =>
+	Object.fromEntries(
+		createButtonVars(
+			'play-btn',
+			playButtonDesign as Partial<ButtonDesignData> | undefined,
+			rawDesign.value?.play_button,
+		),
+	),
+)
+
+const mobilePlayText = computed(() =>
+	props.isPlaying ? pauseButtonText.value : watchVideoText.value,
+)
+const desktopPlayText = computed(() =>
+	props.isPlaying ? pauseButtonText.value : playButtonText.value,
+)
 </script>
 
 <style scoped lang="scss">
 .brand-story__play {
-  &-button {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    z-index: 2;
+	&-button {
+		position: absolute;
+		bottom: 16px;
+		left: 16px;
+		display: inline-flex;
+		justify-content: center;
+		align-items: center;
+		gap: 10px;
+		padding: var(--play-btn-padding, 10px 20px);
+		background: var(--play-btn-bg-color, #000);
+		color: var(--play-btn-text-color, #fff);
+		font-family: var(--play-btn-font-family, var(--body-font-family));
+		font-size: var(--play-btn-font-size, 16px);
+		border-width: var(--play-btn-border-width, 1px);
+		border-style: solid;
+		border-color: var(--play-btn-border-color, #000);
+		border-radius: var(--play-btn-border-radius, 0);
+		cursor: pointer;
+		z-index: 2;
 
-    @media (min-width: 768px) {
-      bottom: 32px;
-      left: 32px;
-    }
-  }
+		@media (min-width: 768px) {
+			bottom: 32px;
+			left: 32px;
+		}
+	}
 
-  &-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    word-wrap: break-word;
+	&-text {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		word-wrap: break-word;
 
-    &--mobile {
-      @media (min-width: 768px) {
-        display: none;
-      }
-    }
+		&--mobile {
+			@media (min-width: 768px) {
+				display: none;
+			}
+		}
 
-    &--desktop {
-      @media (max-width: 767px) {
-        display: none;
-      }
-    }
-  }
+		&--desktop {
+			@media (max-width: 767px) {
+				display: none;
+			}
+		}
+	}
 
-  &-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+	&-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 
-  &-icon svg {
-    display: block;
-  }
+	&-icon svg {
+		display: block;
+	}
 }
 </style>

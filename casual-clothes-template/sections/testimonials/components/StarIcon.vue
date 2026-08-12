@@ -33,6 +33,8 @@ interface Props {
   percent: number
   width?: number
   height?: number
+  /** Unique index for SSR-safe clip ID generation (0-based, e.g., star position in rating) */
+  index?: number
 }
 
 const props = defineProps<Props>()
@@ -42,5 +44,7 @@ const percentWidth = computed(() => (props.percent / 100) * 20)
 const width = props.width ?? 20
 const height = props.height ?? 20
 
-const clipId = `fillClip-${Math.random().toString(36).substr(2, 9)}`
+// Use deterministic ID based on percent and index for SSR hydration safety
+// Math.random() causes hydration mismatch since server/client generate different values
+const clipId = `fillClip-${props.index ?? 0}-${Math.round(props.percent)}`
 </script>

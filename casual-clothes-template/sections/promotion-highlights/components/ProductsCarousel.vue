@@ -31,28 +31,35 @@
 							v-if="hasValidImage(item)"
 							:src="item.item_image?.highResolutionDesktopImage"
 							alt=""
+							loading="lazy"
 							class="product-card__image"
 						/>
 					</div>
 
 					<!-- Product Info -->
-					<div class="product-card__info">
+					<div class="product-card__info" :style="productCardVars">
 						<!-- Title + Price Group -->
 						<div class="product-card__name-price">
-							<h3 class="product-card__title" :style="productTitleStyle">
+							<h3
+								v-show="productTitleDesign?.visible !== false"
+								class="product-card__title"
+							>
 								{{ item.item_title?.value || 'Product Name' }}
 							</h3>
 
 							<!-- Prices (inline) -->
 							<div class="product-card__price">
 								<span
-									:style="productPriceStyle">
+									v-show="productPrice?.visible !== false"
+									class="product-card__price-current"
+								>
 									{{ item.item_price?.value || '$0.00' }}
 								</span>
 								<span
 									v-if="item.item_original_price?.value"
-									:style="productSalePriceStyle"
-									class="product-card__price-original">
+									v-show="productPriceSale?.visible !== false"
+									class="product-card__price-original"
+								>
 									{{ item.item_original_price.value }}
 								</span>
 							</div>
@@ -86,6 +93,7 @@
 			<Button
 				:content="button"
 				:design="buttonDesign"
+				:raw-design="rawButtonDesign"
 				show-arrow
 				class="carousel-button__btn"
 			/>
@@ -101,12 +109,13 @@ import RatingStars from '../../testimonials/components/RatingStars.vue'
 import Badge from '../../../shared/components/Badge.vue'
 import Button from '../../../shared/components/Button.vue'
 import { useCarousel } from '../../../shared/composables'
-import { getColorHex, openProductLink, hasValidImageContent } from '../../../shared/utils'
+import { openProductLink, hasValidImageContent } from '../../../shared/utils'
+import { createTextVars } from '../../../shared/utils/design-vars'
 
 interface ButtonContentProp {
-	title?: string;
-	hasTitle?: boolean;
-	performAction?: () => void;
+	title?: string
+	hasTitle?: boolean
+	performAction?: () => void
 }
 
 interface Props {
@@ -116,6 +125,10 @@ interface Props {
 	productPriceSale?: TextDesignData
 	button?: ButtonContentProp
 	buttonDesign?: ButtonDesignData
+	rawProductTitleDesign?: unknown
+	rawProductPriceDesign?: unknown
+	rawProductSalePriceDesign?: unknown
+	rawButtonDesign?: unknown
 	prevLabel?: string
 	nextLabel?: string
 	currentLanguage?: string
@@ -123,58 +136,37 @@ interface Props {
 
 const props = defineProps<Props>()
 
-// Helper function to check if image is valid
 const hasValidImage = (item: ProductCard): boolean => hasValidImageContent(item.item_image)
 
-// Carousel navigation
 const carousel = ref<HTMLElement | null>(null)
 const totalItems = computed(() => props.products.length)
-const { prevDisabled, nextDisabled, scrollCarousel, shouldShowControls, hasOverflow } = useCarousel(carousel, {
-	totalItems,
-	itemWidthMobile: 200,
-	itemWidthDesktop: 400,
-	gap: 16,
-	isInfinite: true,
-})
+const { prevDisabled, nextDisabled, scrollCarousel, shouldShowControls, hasOverflow } = useCarousel(
+	carousel,
+	{
+		totalItems,
+		itemWidthMobile: 200,
+		itemWidthDesktop: 400,
+		gap: 16,
+		isInfinite: true,
+	},
+)
 
-// Product title styling
-const productTitleStyle = computed(() => ({
-	fontFamily: props.productTitleDesign?.font || 'Inter',
-	fontSize: props.productTitleDesign?.size ? `${props.productTitleDesign.size}px` : '16px',
-	color: getColorHex(props.productTitleDesign?.color) || '#000000',
-	fontWeight: props.productTitleDesign?.bold ? 'bold' : '400',
-	fontStyle: props.productTitleDesign?.italic ? 'italic' : 'normal',
-	lineHeight: '1.5',
-	letterSpacing: '-0.08px',
-	display: props.productTitleDesign?.visible ? '' : 'none',
-}))
+const productCardVars = computed(() =>
+	Object.fromEntries([
+		...createTextVars('product-title', props.productTitleDesign, props.rawProductTitleDesign),
+		...createTextVars('product-price', props.productPrice, props.rawProductPriceDesign),
+		...createTextVars(
+			'product-sale-price',
+			props.productPriceSale,
+			props.rawProductSalePriceDesign,
+		),
+	]),
+)
 
-// Hybrid approach: :style for dynamic, CSS for static
-const productPriceStyle = computed(() => ({
-	fontFamily: props.productPrice?.font || 'Inter',
-	fontSize: props.productPrice?.size ? `${props.productPrice.size}px` : '32px',
-	color: getColorHex(props.productPrice?.color),
-	fontWeight: props.productPrice?.bold ? 'bold' : 'normal',
-	fontStyle: props.productPrice?.italic ? 'italic' : 'normal',
-	display: props.productPrice?.visible ? '' : 'none',
-}))
-
-// Hybrid approach: :style for dynamic, CSS for static
-const productSalePriceStyle = computed(() => ({
-	fontFamily: props.productPriceSale?.font || 'Inter',
-	fontSize: props.productPriceSale?.size ? `${props.productPriceSale.size}px` : '32px',
-	color: getColorHex(props.productPriceSale?.color),
-	fontWeight: props.productPriceSale?.bold ? 'bold' : 'normal',
-	fontStyle: props.productPriceSale?.italic ? 'italic' : 'normal',
-	display: props.productPriceSale?.visible ? '' : 'none',
-}))
-
-// Rating helper
 const getProductRating = (product: ProductCard): number => {
 	return product.item_rating?.value ? Number(product.item_rating.value) : 0
 }
 
-// Open product URL
 const openProductUrl = (product: ProductCard) => {
 	openProductLink(product.item_link?.value, props.currentLanguage || 'en')
 }
@@ -237,7 +229,7 @@ const openProductUrl = (product: ProductCard) => {
 	top: 0;
 	left: 0;
 	padding: 4px 8px;
-	font-family: 'Inter', sans-serif;
+	font-family: var(--body-font-family);
 	font-size: 12px;
 	font-weight: 400;
 	line-height: 1.5;
@@ -261,6 +253,11 @@ const openProductUrl = (product: ProductCard) => {
 }
 
 .product-card__title {
+	font-family: var(--product-title-font-family, var(--body-font-family));
+	color: var(--product-title-color, var(--fg-color));
+	font-size: var(--product-title-font-size, var(--body-2-font-size));
+	font-weight: var(--product-title-font-weight, var(--body-font-weight));
+	font-style: var(--product-title-font-style, var(--body-font-style));
 	line-height: 1.5;
 	letter-spacing: -0.08px;
 	margin: 0;
@@ -275,10 +272,22 @@ const openProductUrl = (product: ProductCard) => {
 	letter-spacing: -0.08px;
 }
 
+.product-card__price-current {
+	font-family: var(--product-price-font-family, var(--body-font-family));
+	color: var(--product-price-color, var(--fg-color));
+	font-size: var(--product-price-font-size, var(--body-2-font-size));
+	font-weight: var(--product-price-font-weight, var(--body-font-weight));
+	font-style: var(--product-price-font-style, var(--body-font-style));
+}
+
 .product-card__price-original {
-	color: rgba(0, 0, 0, 0.32);
+	font-family: var(--product-sale-price-font-family, var(--body-font-family));
+	color: var(--fg-muted-color);
+	font-size: var(--product-sale-price-font-size, var(--body-2-font-size));
+	font-weight: var(--product-sale-price-font-weight, var(--body-font-weight));
+	font-style: var(--product-sale-price-font-style, var(--body-font-style));
 	text-decoration: line-through;
-  margin-left: 7px;
+	margin-left: 7px;
 }
 
 /* Button Container */

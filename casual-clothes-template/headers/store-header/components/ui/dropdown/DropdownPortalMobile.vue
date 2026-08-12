@@ -6,7 +6,7 @@
 			<slot name="trigger" />
 		</div>
 
-		<Teleport to="#portal-target">
+		<Teleport to="#portal-target" v-if="isMounted">
 			<div
 				ref="dropdownRef"
 				v-if="isDropdownOpen"
@@ -23,13 +23,15 @@
 
 <script setup lang="ts">
 import { ref, shallowRef, nextTick, watch } from 'vue'
-import { onClickOutside, useWindowScroll } from '@vueuse/core'
+import { onClickOutside, useMounted, useWindowScroll } from '@vueuse/core'
 
 const somePadding = 5
 
 interface ContentCoordinates{
   top: `${number}px`
 }
+
+const isMounted = useMounted()
 
 const isDropdownOpen = defineModel<boolean>({ default: false })
 

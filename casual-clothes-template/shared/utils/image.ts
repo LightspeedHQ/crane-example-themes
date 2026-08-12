@@ -5,23 +5,25 @@
  */
 
 /**
- * Checks if an image URL is valid (not undefined, empty, or containing 'undefined')
+ * Checks if an image URL is valid (not undefined, empty, whitespace-only, or containing 'undefined')
  *
  * @param url - The image URL to validate
- * @returns The original URL if valid, empty string otherwise
+ * @returns The trimmed URL if valid, empty string otherwise
  *
  * @example
  * ```typescript
  * const imageUrl = isValidImageUrl(item.image?.highResolutionDesktopImage)
- * // Returns '' if URL is undefined, '/undefined', or contains 'undefined'
- * // Returns the original URL if valid
+ * // Returns '' if URL is undefined, whitespace-only, '/undefined', or contains 'undefined'
+ * // Returns the trimmed URL if valid
  * ```
  */
 export function isValidImageUrl(url: string | undefined): string {
-	if (!url || url === '/undefined' || url === 'undefined' || url.includes('undefined')) {
+	const trimmedUrl = url?.trim()
+
+	if (!trimmedUrl || trimmedUrl === '/undefined' || trimmedUrl === 'undefined' || trimmedUrl.includes('undefined')) {
 		return ''
 	}
-	return url
+	return trimmedUrl
 }
 
 /**

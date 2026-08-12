@@ -1,26 +1,26 @@
 <template>
 	<div class="mobile-catalog-submenu-grid">
-		<div 
-			v-for="subcategory in visibleSubcategories" 
-			:key="subcategory.id" 
+		<div
+			v-for="subcategory in visibleSubcategories"
+			:key="subcategory.id"
 			class="mobile-catalog-submenu-grid__column"
 		>
 			<!-- All subcategories are clickable links -->
 			<a
 				:href="subcategory.urlPath || '#'"
 				class="mobile-catalog-submenu-grid__header-cell mobile-catalog-submenu-grid__header-cell--link"
-				@click="$emit('close-all')"
+				@click="closeAllCatalogs"
 			>
 				{{ subcategory.name }}
 			</a>
 
-			<div 
-				v-if="subcategory.children && subcategory.children.length > 0" 
+			<div
+				v-if="subcategory.children && subcategory.children.length > 0"
 				class="mobile-catalog-submenu-grid__separator"
 			></div>
 
-			<div 
-				v-if="subcategory.children && subcategory.children.length > 0" 
+			<div
+				v-if="subcategory.children && subcategory.children.length > 0"
 				class="mobile-catalog-submenu-grid__items"
 			>
 				<a
@@ -28,7 +28,7 @@
 					:key="productCategory.id"
 					:href="productCategory.urlPath || '#'"
 					class="mobile-catalog-submenu-grid__item"
-					@click="$emit('close-all')"
+					@click="closeAllCatalogs"
 				>
 					{{ productCategory.name }}
 				</a>
@@ -40,17 +40,15 @@
 <script setup lang="ts">
 import { toRef } from 'vue'
 import type { Category } from '../../types'
-import { useVisibleSubcategories, useHeaderDesign } from '../../composables'
+import { useVisibleSubcategories, useHeaderDesign, useHeaderState } from '../../composables'
 
 const props = defineProps<{
 	category: Category | null
 }>()
 
-defineEmits<{
-	(e: 'close-all'): void
-}>()
+const { closeAllCatalogs } = useHeaderState()
 
-const { headerTextColor, headerFontFamily, headerFontSize } = useHeaderDesign()
+const { headerTextColor } = useHeaderDesign()
 const visibleSubcategories = useVisibleSubcategories(toRef(props, 'category'))
 </script>
 
@@ -98,8 +96,8 @@ const visibleSubcategories = useVisibleSubcategories(toRef(props, 'category'))
 
 .mobile-catalog-submenu-grid__header-cell {
   color: v-bind(headerTextColor);
-  font-family: v-bind(headerFontFamily);
-  font-size: v-bind(headerFontSize);
+  font-family: var(--header-font-family, var(--body-font-family));
+  font-size: inherit;
   font-style: inherit;
   font-weight: 700;
   line-height: 150%;
@@ -148,8 +146,8 @@ const visibleSubcategories = useVisibleSubcategories(toRef(props, 'category'))
 
 .mobile-catalog-submenu-grid__item {
   color: v-bind(headerTextColor);
-  font-family: v-bind(headerFontFamily);
-  font-size: v-bind(headerFontSize);
+  font-family: var(--header-font-family, var(--body-font-family));
+  font-size: inherit;
   font-style: inherit;
   font-weight: inherit;
   line-height: 150%;

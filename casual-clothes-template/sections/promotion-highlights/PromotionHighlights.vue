@@ -6,28 +6,13 @@
 			:description="sectionDescription"
 			:title-design="sectionTitleDesign"
 			:description-design="sectionDescriptionDesign"
-		/>
-
-		<!-- Loading State -->
-		<div v-if="isLoading" class="loading-skeleton">
-			<div v-for="i in 4" :key="i" class="loading-skeleton__card">
-				<Skeleton variant="image" height="300px" />
-				<Skeleton variant="text" width="70%" class="loading-skeleton__title" />
-				<Skeleton variant="text" width="50%" class="loading-skeleton__price" />
-			</div>
-		</div>
-
-		<!-- Error State -->
-		<ErrorState
-			v-else-if="hasError"
-			:message="errorMessage"
-			:title="t('$label.error.title')"
-			:default-message="t('$label.error.message')"
+			:raw-title-design="rawDesign?.section_title"
+			:raw-description-design="rawDesign?.section_description"
 		/>
 
 		<!-- Empty State -->
 		<EmptyState
-			v-else-if="products.length === 0"
+			v-if="!promotionProductsContent.hasProducts"
 			:title="t('$label.empty.title')"
 			:message="t('$label.empty.message')"
 		/>
@@ -41,6 +26,10 @@
 			:product-price-sale="productSalePriceDesign"
 			:button="viewAllButton"
 			:button-design="btnDesign as ButtonDesignData"
+			:raw-product-title-design="rawDesign?.product_title"
+			:raw-product-price-design="rawDesign?.product_price"
+			:raw-product-sale-price-design="rawDesign?.product_sale_price"
+			:raw-button-design="rawDesign?.view_all_button"
 			:prev-label="t('$label.nav.previous')"
 			:next-label="t('$label.nav.next')"
 			:current-language="currentLang"
@@ -56,53 +45,56 @@ import {
 	useInputboxElementContent,
 	useTextareaElementContent,
 	useTextElementDesign,
-	type ImageContent,
+	useProductSelectorElementContent,
+	useVueBaseProps,
 } from '@lightspeed/crane'
 import { Content, Design } from './type'
 import { ProductCard } from './types'
+import type { ImageContent } from '../../shared/types/type'
 import translations from './settings/translations'
 
 import SectionWrapper from '../../shared/components/SectionWrapper.vue'
 import SectionHeader from '../../shared/components/SectionHeader.vue'
 import ProductsCarousel from './components/ProductsCarousel.vue'
 import EmptyState from '../../shared/components/EmptyState.vue'
-import ErrorState from '../../shared/components/ErrorState.vue'
-import Skeleton from '../../shared/components/Skeleton.vue'
 import { computed } from 'vue'
-import { useProducts, useBackgroundStyle, useTranslations } from '../../shared/composables'
-import { PRODUCTS_LIMITS } from '../../shared/constants'
+import { useTranslations, useOrderedSelectorProducts } from '../../shared/composables'
+import { useColorPresetVars } from '../../shared/composables/design'
+import { createBackgroundVars } from '../../shared/utils/design-vars'
 
-// Translation helper with current language
 const { t, currentLang } = useTranslations(translations)
 
-// Fetch real products from store
-const { products, isLoading, hasError, errorMessage } = useProducts<Content, Design>(() => true, PRODUCTS_LIMITS.PROMOTION)
+const promotionProductsContent = useProductSelectorElementContent<Content>('promotion_products')
 
-// Content
 const sectionTitle = useInputboxElementContent<Content>('section_title')
 const sectionDescription = useTextareaElementContent<Content>('section_description')
 
-// Design
 const sectionTitleDesign = useTextElementDesign<Design>('section_title') as TextDesignData
 const sectionDescriptionDesign = useTextElementDesign<Design>('section_description') as TextDesignData
+
+const { design: rawDesign } = useVueBaseProps<unknown, Design>()
 const productTitleDesign = useTextElementDesign<Design>('product_title') as TextDesignData
 const productPriceDesign = useTextElementDesign<Design>('product_price') as TextDesignData
 const productSalePriceDesign = useTextElementDesign<Design>('product_sale_price') as TextDesignData
 
-// Background style using shared composable
 const backgroundDesign = useBackgroundElementDesign<Design>('background') as BackgroundDesignData
-const backgroundStyle = useBackgroundStyle(backgroundDesign)
+const colorPresetVars = useColorPresetVars(rawDesign)
+const backgroundStyle = computed(() => ({
+	...Object.fromEntries(createBackgroundVars('section', backgroundDesign, rawDesign.value?.background)),
+	...colorPresetVars.value,
+}))
 
 const viewAllButton = useButtonElementContent<Content>('view_all_button')
 const btnDesign = useButtonElementDesign<Design>('view_all_button')
 
-// Transform real products to match ProductCard interface
+const orderedProducts = useOrderedSelectorProducts(promotionProductsContent, 'promotion_products')
+
 const productCards = computed<ProductCard[]>(() =>
-	products.value.map((product, index) => ({
+	orderedProducts.value.map((product, index) => ({
 		id: product.id || index,
-		product_tag: product.ribbon?.text ? {
+		product_tag: product.ribbon?.text && product.ribbon.color ? {
 			value: product.ribbon.text,
-			color: product.ribbon.color,
+			color: `rgba(${product.ribbon.color.red}, ${product.ribbon.color.green}, ${product.ribbon.color.blue}, ${product.ribbon.color.alpha})`,
 			hasContent: true,
 		} : undefined,
 		item_image: product.imageUrl ? {
@@ -117,16 +109,16 @@ const productCards = computed<ProductCard[]>(() =>
 			hasContent: true,
 		},
 		item_price: {
-			value: product.defaultDisplayedPriceFormatted,
+			value: product.formattedPrice,
 			hasContent: true,
 		},
-		item_original_price: product.compareToPriceFormatted ? {
-			value: product.compareToPriceFormatted,
+		item_original_price: product.formattedComparePrice ? {
+			value: product.formattedComparePrice,
 			hasContent: true,
 		} : undefined,
 		item_rating: {
-			value: product.averageRating ? String(product.averageRating) : '0',
-			hasContent: !!product.averageRating,
+			value: product.productRating?.rating ? String(product.productRating.rating) : '0',
+			hasContent: !!product.productRating?.rating,
 		},
 		item_link: {
 			value: product.url,
@@ -136,34 +128,3 @@ const productCards = computed<ProductCard[]>(() =>
 )
 
 </script>
-
-<style scoped>
-/* Loading Skeleton - Carousel style */
-.loading-skeleton {
-	display: flex;
-	gap: 16px;
-	overflow-x: hidden;
-	padding: 20px 0;
-}
-
-.loading-skeleton__card {
-	flex: 0 0 200px;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
-}
-
-.loading-skeleton__title {
-	margin-top: 12px;
-}
-
-.loading-skeleton__price {
-	height: 24px;
-}
-
-@media (min-width: 768px) {
-	.loading-skeleton__card {
-		flex: 0 0 300px;
-	}
-}
-</style>

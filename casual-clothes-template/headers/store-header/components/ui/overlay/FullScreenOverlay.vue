@@ -1,6 +1,14 @@
 <template>
-	<Teleport to="body" :disabled="!isOpen">
-		<div v-if="isOpen" class="fullscreen-overlay" @click="$emit('close')">
+	<Teleport to="body" :disabled="!keepMountedWhenClosed && !isOpen">
+		<div
+			v-if="keepMountedWhenClosed || isOpen"
+			v-show="isOpen"
+			class="fullscreen-overlay"
+			:style="props.presetVars"
+			:aria-hidden="!isOpen"
+			:inert="!isOpen"
+			@click="$emit('close')"
+		>
 			<div
 				class="fullscreen-overlay__content"
 				:style="{ backgroundColor, color: textColor }"
@@ -15,11 +23,22 @@
 <script setup lang="ts">
 import { watch, onMounted, onUnmounted } from 'vue'
 
-const props = defineProps<{
-  isOpen: boolean;
-  backgroundColor?: string;
-  textColor?: string;
-}>()
+const props = withDefaults(
+	defineProps<{
+		isOpen: boolean
+		backgroundColor?: string
+		textColor?: string
+		/** CSS custom properties to establish color cascade on teleported element */
+		presetVars?: Record<string, string>
+		/**
+		 * When true, the overlay root stays in the DOM while closed (hidden via `v-show`)
+		 * instead of unmounting. Use for expensive subtrees (e.g. embedded maps) so they
+		 * are not torn down and reloaded on every open. Default: unmount when closed.
+		 */
+		keepMountedWhenClosed?: boolean
+	}>(),
+	{ keepMountedWhenClosed: false },
+)
 
 const { backgroundColor, textColor } = props
 
@@ -80,7 +99,7 @@ onUnmounted(() => {
   width: 100%;
   height: 100vh;
   /* Default background, can be overridden by inline styles */
-  background: #fff;
+  background: var(--bg-color);
   display: flex;
   flex-direction: column;
   padding: 16px;

@@ -4,16 +4,12 @@
 			<ContactInfo />
 			<UsefulLinks />
 		</div>
-		<div class="customer-care__form-column">
-			<ContactForm />
-		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import ContactInfo from './ContactInfo.vue'
 import UsefulLinks from './UsefulLinks.vue'
-import ContactForm from './ContactForm.vue'
 </script>
 
 <style scoped lang="scss">

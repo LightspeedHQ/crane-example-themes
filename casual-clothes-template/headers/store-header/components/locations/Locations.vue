@@ -12,13 +12,6 @@
 				:locations="locationCards"
 				:selected-index="selectedLocationIndex"
 				:view-on-map-text="viewOnMapText"
-				:text-color="textColorValue"
-				:text-font="textFontValue"
-				:text-size="textSizeValue"
-				:text-weight="textWeightValue"
-				:text-style="textStyleValue"
-				:link-color="linkColorValue"
-				:link-font="linkFontValue"
 				class="locations__list"
 				@select="selectedLocationIndex = $event"
 				@close="$emit('close')"
@@ -31,13 +24,6 @@
 				:locations="locationCards"
 				:selected-index="-1"
 				:view-on-map-text="viewOnMapText"
-				:text-color="textColorValue"
-				:text-font="textFontValue"
-				:text-size="textSizeValue"
-				:text-weight="textWeightValue"
-				:text-style="textStyleValue"
-				:link-color="linkColorValue"
-				:link-font="linkFontValue"
 				@close="$emit('close')"
 			/>
 		</div>
@@ -50,8 +36,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useLocations, useHeaderDesign, useHeaderTranslations } from '../../composables'
+import { ref } from 'vue'
+import { useLocations, useHeaderTranslations } from '../../composables'
 import LocationMap from './LocationMap.vue'
 import LocationsList from './LocationsList.vue'
 
@@ -59,24 +45,10 @@ defineEmits<{
   (e: 'close'): void
 }>()
 
-// Access locations data and settings
 const { locationCards, hasLocations, showMap, viewOnMapText, mapZoom } = useLocations()
 const { translate } = useHeaderTranslations()
 const emptyStateText = translate('$label.empty_state.no_locations', 'No store locations configured')
 
-// Access header design tokens (used for all text styling including locations)
-const { headerTextColor, headerFontFamily, headerFontSize, headerFontWeight, headerFontStyle } = useHeaderDesign()
-
-// Use header design for location cards (for consistency with rest of header)
-const textColorValue = computed(() => headerTextColor.value)
-const textFontValue = computed(() => headerFontFamily.value)
-const textSizeValue = computed(() => parseInt(headerFontSize.value) || 14)
-const textWeightValue = computed(() => String(headerFontWeight.value))
-const textStyleValue = computed(() => headerFontStyle.value)
-const linkColorValue = computed(() => headerTextColor.value) // Links use same color as text
-const linkFontValue = computed(() => headerFontFamily.value)
-
-// Track which location is selected (for map switching)
 const selectedLocationIndex = ref(0)
 </script>
 
@@ -152,11 +124,11 @@ const selectedLocationIndex = ref(0)
   text-align: center;
 
   &-text {
-    color: v-bind(headerTextColor);
-    font-family: v-bind(headerFontFamily);
-    font-size: v-bind(headerFontSize);
-    font-weight: v-bind(headerFontWeight);
-    font-style: v-bind(headerFontStyle);
+    color: inherit;
+    font-family: var(--header-font-family, var(--body-font-family));
+    font-size: inherit;
+    font-weight: inherit;
+    font-style: inherit;
     opacity: 0.6;
     margin: 0;
   }

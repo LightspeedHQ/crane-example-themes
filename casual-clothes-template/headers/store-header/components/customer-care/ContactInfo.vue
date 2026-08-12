@@ -26,38 +26,29 @@ import {
 } from '../../types/customer-care'
 
 const { translate } = useHeaderTranslations()
-const { headerTextColor, headerFontFamily, headerFontSize } = useHeaderDesign()
+const { headerTextColor } = useHeaderDesign()
 
-// Access DECK from content settings
 const contactUsInfoDeckRaw = useDeckElementContent<Content>('ContactUsInfo')
-
-// Map DECK cards with proper types
 const contactUsInfoCards = useMappedDeckCards<ContactUsInfoCard, Content>(
 	contactUsInfoDeckRaw,
 	ContactUsInfoDeckConfig,
 )
 
-// Helper function to create appropriate link based on content
 const createLink = (value: string): string => {
 	if (!value) return ''
 
-	// Check if it's an email (contains @ and no spaces)
 	if (value.includes('@') && !value.includes(' ')) {
 		return `mailto:${value}`
 	}
 
-	// Check if it's a phone number (contains only digits, spaces, +, -, (, ))
 	if (/^[\d\s+\-()]+$/.test(value)) {
-		// Remove all non-digit characters except +
 		const cleanPhone = value.replace(/[\s\-()]/g, '')
 		return `tel:${cleanPhone}`
 	}
 
-	// Otherwise return as is (might be a URL or other text)
 	return value.startsWith('http') ? value : ''
 }
 
-// Contact Us Information from settings
 const contactUsInfo = computed(() => {
 	return contactUsInfoCards.value.map((card) => {
 		const value = card.contact_value?.value || ''
@@ -80,7 +71,7 @@ const contactUsInfo = computed(() => {
 
 	&__section-title {
 		color: v-bind(headerTextColor);
-		font-family: v-bind(headerFontFamily);
+		font-family: var(--header-font-family, var(--body-font-family));
 		font-size: clamp(16px, 1.5vw, 18px);
 		font-weight: 700;
 		line-height: 150%;
@@ -91,8 +82,8 @@ const contactUsInfo = computed(() => {
 
 	&__section-link {
 		color: v-bind(headerTextColor);
-		font-family: v-bind(headerFontFamily);
-		font-size: v-bind(headerFontSize);
+		font-family: var(--header-font-family, var(--body-font-family));
+		font-size: inherit;
 		font-weight: 400;
 		line-height: 150%;
 		letter-spacing: -0.08px;

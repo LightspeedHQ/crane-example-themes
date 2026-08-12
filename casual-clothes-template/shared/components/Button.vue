@@ -1,6 +1,7 @@
 <template>
 	<component
 		:is="tag"
+		v-show="props.design?.visible !== false"
 		:href="href"
 		:type="isButton ? type : undefined"
 		class="button"
@@ -23,7 +24,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useButtonStyles } from '../composables'
+import { createButtonVars } from '../utils/design-vars'
 import ArrowRightIcon from './icons/ArrowRightIcon.vue'
 
 /**
@@ -73,7 +74,6 @@ interface ButtonDesignProp {
 	size?: string
 	style?: string
 	color?: { hex?: string } | string
-	shape?: { borderRadius?: number }
 	visible?: boolean
 }
 
@@ -82,6 +82,8 @@ interface Props {
 	content?: ButtonContentProp
 	/** Crane ButtonDesignData for styling (accepts useButtonElementDesign result) */
 	design?: ButtonDesignProp
+	/** Raw design from useVueBaseProps().design.value[elementName] for global token detection */
+	rawDesign?: unknown
 	/** URL for link mode (renders as <a>) */
 	href?: string
 	/** Button type attribute (only for button mode) */
@@ -119,13 +121,20 @@ const tag = computed(() => {
 
 const isButton = computed(() => tag.value === 'button')
 
-// Use shared button styling composable
-// Cast to Partial<ButtonDesignData> for compatibility with useButtonStyles
-const buttonStyle = useButtonStyles(props.design as Partial<ButtonDesignData> | undefined)
+// CSS custom properties from design
+const buttonVars = computed(() =>
+	Object.fromEntries(
+		createButtonVars(
+			'btn',
+			props.design as Partial<ButtonDesignData> | undefined,
+			props.rawDesign,
+		),
+	),
+)
 
-// Merge computed styles with full width
+// Merge computed vars with full-width override
 const computedStyle = computed(() => {
-	const styles = { ...buttonStyle.value }
+	const styles = { ...buttonVars.value }
 	if (props.fullWidth) {
 		styles.width = '100%'
 	}
@@ -161,18 +170,21 @@ const handleClick = (event: MouseEvent) => {
 	justify-content: center;
 	align-items: center;
 	gap: 10px;
-	padding: 10px 20px;
-	background: #000;
-	color: #FFF;
-	font-size: 16px;
-	font-weight: 400;
+	padding: var(--btn-padding, 10px 20px);
+	background: var(--btn-bg-color, var(--fg-accented-color));
+	color: var(--btn-text-color, var(--bg-color));
+	border-radius: var(--btn-border-radius);
+	border: var(--btn-border-width) solid var(--btn-border-color, var(--fg-accented-color));
+	font-family: var(--btn-font-family, var(--body-font-family));
+	font-size: var(--btn-font-size, var(--button-font-size));
+	font-style: var(--button-font-style);
+	font-weight: var(--button-font-weight);
 	cursor: pointer;
 	transition: all 0.2s ease;
 	text-decoration: none;
 	font-style: normal;
 	line-height: 150%;
 	letter-spacing: -0.08px;
-	border: 1px solid #000;
 
 	&:hover:not(.button--disabled) {
 		opacity: 0.8;

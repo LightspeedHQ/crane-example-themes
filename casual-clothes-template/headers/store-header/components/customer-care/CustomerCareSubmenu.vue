@@ -1,7 +1,7 @@
 <template>
-	<Teleport to="body">
-		<div v-if="isOpen">
-			<div class="customer-care-submenu-overlay" @click="$emit('close')" />
+	<Teleport to="body" v-if="isMounted">
+		<div v-if="isOpen" :style="headerPresetVars">
+			<div class="customer-care-submenu-overlay" @click="closeCustomerCare" />
 			<div
 				class="customer-care-submenu-overlay__content"
 				:style="{ top: customerCareSubmenuTopOffset }"
@@ -13,30 +13,29 @@
 </template>
 
 <script setup lang="ts">
-import type { OverlayProps, CloseEmits } from '../../types'
-import { useEscapeKey, useHeaderDesign, useSubmenuPosition, useHeaderViewport } from '../../composables'
+import { useMounted } from '@vueuse/core'
+import type { OverlayProps } from '../../types'
+import { useEscapeKey, useHeaderDesign, useSubmenuPosition, useHeaderViewport, useHeaderState } from '../../composables'
 import CustomerCare from './CustomerCare.vue'
 
 const props = defineProps<OverlayProps>()
-const emit = defineEmits<CloseEmits>()
 
-// SSR-safe viewport detection
+const isMounted = useMounted()
+
 const { isDesktop } = useHeaderViewport()
+const { closeCustomerCare } = useHeaderState()
 
 const onMouseLeave = () => {
 	if (isDesktop.value) {
-		emit('close')
+		closeCustomerCare()
 	}
 }
 
-const { headerBackgroundColor } = useHeaderDesign()
-
-// Calculate submenu position dynamically - position below the top row
+const { headerBackgroundColor, headerPresetVars } = useHeaderDesign()
 const { submenuTopOffset: customerCareSubmenuTopOffset } = useSubmenuPosition(() => props.isOpen, '.header-top-row')
 
-// Handle Escape key to close submenu
 useEscapeKey(
-	() => emit('close'),
+	() => closeCustomerCare(),
 	() => props.isOpen,
 )
 </script>

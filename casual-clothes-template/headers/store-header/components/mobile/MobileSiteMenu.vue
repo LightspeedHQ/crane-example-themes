@@ -3,22 +3,20 @@
 		:is-open="isOpen"
 		:background-color="headerBackgroundColor"
 		:text-color="headerTextColor"
-		@close="$emit('close')"
+		:preset-vars="headerPresetVars"
+		@close="closeMobileSiteMenu"
 	>
 		<div class="mobile-site-menu__header">
 			<div class="mobile-site-menu__language">
 				<LanguageSelector v-if="languageSwitcherShow.enabled" />
 			</div>
-			<button class="mobile-site-menu__close" :aria-label="closeMobileMenuLabel" @click="$emit('close')">
+			<button class="mobile-site-menu__close" :aria-label="closeMobileMenuLabel" @click="closeMobileSiteMenu">
 				<span class="mobile-site-menu__close-icon" v-html="CloseIcon"></span>
 			</button>
 		</div>
 
 		<div class="mobile-site-menu__content">
-			<MobileNavigationMenu
-				@open-find-store="$emit('open-find-store')"
-				@open-customer-care="$emit('open-customer-care')"
-			/>
+			<MobileNavigationMenu />
 		</div>
 	</FullScreenOverlay>
 </template>
@@ -28,19 +26,16 @@ import LanguageSelector from '../user/LanguageSelector.vue'
 import MobileNavigationMenu from './MobileNavigationMenu.vue'
 import { FullScreenOverlay } from '../ui/overlay'
 import type { OverlayProps } from '../../types/common'
-import { useHeaderToggles, useHeaderDesign, useHeaderTranslations } from '../../composables'
+import { useHeaderToggles, useHeaderDesign, useHeaderTranslations, useHeaderState } from '../../composables'
 import CloseIcon from '../../../../shared/assets/close-icon.svg?raw'
 
 defineProps<OverlayProps>()
-defineEmits<{
-	(e: 'close'): void
-	(e: 'open-find-store'): void
-	(e: 'open-customer-care'): void
-}>()
+
+const { closeMobileSiteMenu } = useHeaderState()
 
 const { translate } = useHeaderTranslations()
 const { languageSwitcherShow } = useHeaderToggles()
-const { headerBackgroundColor, headerTextColor } = useHeaderDesign()
+const { headerBackgroundColor, headerTextColor, headerPresetVars } = useHeaderDesign()
 const closeMobileMenuLabel = translate('$label.aria.close_mobile_menu', 'Close mobile menu')
 </script>
 

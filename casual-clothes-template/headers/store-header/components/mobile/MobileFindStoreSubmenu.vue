@@ -1,17 +1,19 @@
 <template>
 	<FullScreenOverlay
 		:is-open="isOpen"
+		:keep-mounted-when-closed="true"
 		:background-color="headerBackgroundColor"
 		:text-color="headerTextColor"
-		@close="$emit('close')"
+		:preset-vars="headerPresetVars"
+		@close="closeFindStore"
 	>
 		<div class="mobile-find-store-submenu">
 			<div class="mobile-find-store-submenu__header">
-				<button class="mobile-find-store-submenu__back-btn" @click="$emit('close')" :aria-label="backLabel">
+				<button class="mobile-find-store-submenu__back-btn" @click="closeFindStore" :aria-label="backLabel">
 					<span class="mobile-find-store-submenu__back-icon" v-html="BackArrowIcon"></span>
 					<span class="mobile-find-store-submenu__title">{{ backLabel }}</span>
 				</button>
-				<button class="mobile-find-store-submenu__close-btn" @click="$emit('close-all')" :aria-label="closeLabel">
+				<button class="mobile-find-store-submenu__close-btn" @click="closeAllFindStore" :aria-label="closeLabel">
 					<span class="mobile-find-store-submenu__close-icon" v-html="CloseIcon"></span>
 				</button>
 			</div>
@@ -24,18 +26,19 @@
 </template>
 
 <script setup lang="ts">
-import type { OverlayProps, CascadeCloseEmits } from '../../types/common'
+import type { OverlayProps } from '../../types/common'
 import { FullScreenOverlay } from '../ui/overlay'
-import { useHeaderTranslations, useHeaderDesign } from '../../composables'
+import { useHeaderTranslations, useHeaderDesign, useHeaderState } from '../../composables'
 import BackArrowIcon from '../../assets/back-arrow.svg?raw'
 import CloseIcon from '../../../../shared/assets/close-icon.svg?raw'
 import Locations from '../locations/Locations.vue'
 
 defineProps<OverlayProps>()
-defineEmits<CascadeCloseEmits>()
+
+const { closeFindStore, closeAllFindStore } = useHeaderState()
 
 const { translate } = useHeaderTranslations()
-const { headerBackgroundColor, headerTextColor, headerFontFamily, headerFontSize } = useHeaderDesign()
+const { headerBackgroundColor, headerTextColor, headerPresetVars } = useHeaderDesign()
 const backLabel = translate('$label.aria.back', 'Back')
 const closeLabel = translate('$label.aria.close', 'Close')
 </script>
@@ -100,8 +103,8 @@ const closeLabel = translate('$label.aria.close', 'Close')
 
 .mobile-find-store-submenu__title {
   color: v-bind(headerTextColor);
-  font-family: v-bind(headerFontFamily);
-  font-size: v-bind(headerFontSize);
+  font-family: var(--header-font-family, var(--body-font-family));
+  font-size: inherit;
   font-style: inherit;
   font-weight: inherit;
   line-height: 24px;

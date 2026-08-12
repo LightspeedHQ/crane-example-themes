@@ -46,25 +46,18 @@ export default {
 	design: {
 		eyebrow_text: {
 			type: 'TEXT',
-			font: 'inter',
-			size: 16,
-			bold: false,
-			italic: false,
-			color: '#FFFFFF',
 			visible: true,
+			color: '#FFFFFF',
 		},
 		hero_title: {
 			type: 'TEXT',
-			font: 'inter',
-			size: 36,
-			bold: false,
-			italic: false,
 			color: '#FFFFFF',
+			bold: true,
 			visible: true,
 		},
 		cta_button: {
 			type: 'BUTTON',
-			font: 'inter',
+			font: 'global.fontFamily.body',
 			appearance: 'SOLID',
 			size: 'MEDIUM',
 			shape: 'RECTANGLE',

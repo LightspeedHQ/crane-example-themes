@@ -41,6 +41,11 @@ export const Z_INDEX_CATALOG_CONTENT = 10001
 /**
  * Layout Positions
  */
-// Catalog submenu top offset (distance from top of viewport)
-// Calculated as: KeyInfoBar (40px) + HeaderTopRow (40px) + HeaderBottomRow (40px) - borders (2px) = 118px
-export const CATALOG_SUBMENU_TOP_OFFSET = 118
+// Height of each header row: KeyInfoBar, HeaderTopRow, HeaderBottomRow
+// Must stay in sync with the height/min-height in HeaderTopRow.vue, HeaderBottomRow.vue,
+// and the padding-derived height of KeyInfoBar.vue (padding: 8px top + ~24px line-height + 8px bottom = 40px).
+// Mirrored as $HEADER_ROW_HEIGHT in _constants.scss.
+export const HEADER_ROW_HEIGHT = 40
+// Distance from top of viewport to the catalog submenu.
+// Formula: KeyInfoBar + HeaderTopRow + HeaderBottomRow - 2px borders = 118px
+export const CATALOG_SUBMENU_TOP_OFFSET = HEADER_ROW_HEIGHT * 3 - 2

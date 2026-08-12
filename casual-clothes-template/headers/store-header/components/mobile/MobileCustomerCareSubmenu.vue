@@ -3,15 +3,16 @@
 		:is-open="isOpen"
 		:background-color="headerBackgroundColor"
 		:text-color="headerTextColor"
-		@close="$emit('close')"
+		:preset-vars="headerPresetVars"
+		@close="closeCustomerCare"
 	>
 		<div class="mobile-customer-care-submenu">
 			<div class="mobile-customer-care-submenu__header">
-				<button class="mobile-customer-care-submenu__back-btn" @click="$emit('close')" :aria-label="backLabel">
+				<button class="mobile-customer-care-submenu__back-btn" @click="closeCustomerCare" :aria-label="backLabel">
 					<span class="mobile-customer-care-submenu__back-icon" v-html="BackArrowIcon"></span>
 					<span class="mobile-customer-care-submenu__title">{{ backLabel }}</span>
 				</button>
-				<button class="mobile-customer-care-submenu__close-btn" @click="$emit('close-all')" :aria-label="closeLabel">
+				<button class="mobile-customer-care-submenu__close-btn" @click="closeAllCustomerCare" :aria-label="closeLabel">
 					<span class="mobile-customer-care-submenu__close-icon" v-html="CloseIcon"></span>
 				</button>
 			</div>
@@ -24,18 +25,19 @@
 </template>
 
 <script setup lang="ts">
-import type { OverlayProps, CascadeCloseEmits } from '../../types/common'
+import type { OverlayProps } from '../../types'
 import { FullScreenOverlay } from '../ui/overlay'
-import { useHeaderTranslations, useHeaderDesign } from '../../composables'
+import { useHeaderTranslations, useHeaderDesign, useHeaderState } from '../../composables'
 import BackArrowIcon from '../../assets/back-arrow.svg?raw'
 import CloseIcon from '../../../../shared/assets/close-icon.svg?raw'
 import CustomerCare from '../customer-care/CustomerCare.vue'
 
 defineProps<OverlayProps>()
-defineEmits<CascadeCloseEmits>()
+
+const { closeCustomerCare, closeAllCustomerCare } = useHeaderState()
 
 const { translate } = useHeaderTranslations()
-const { headerBackgroundColor, headerTextColor, headerFontFamily, headerFontSize } = useHeaderDesign()
+const { headerBackgroundColor, headerTextColor, headerPresetVars } = useHeaderDesign()
 const backLabel = translate('$label.aria.back', 'Back')
 const closeLabel = translate('$label.aria.close', 'Close')
 </script>
@@ -100,8 +102,8 @@ const closeLabel = translate('$label.aria.close', 'Close')
 
 .mobile-customer-care-submenu__title {
   color: v-bind(headerTextColor);
-  font-family: v-bind(headerFontFamily);
-  font-size: v-bind(headerFontSize);
+  font-family: var(--header-font-family, var(--body-font-family));
+  font-size: inherit;
   font-style: inherit;
   font-weight: inherit;
   line-height: 24px;

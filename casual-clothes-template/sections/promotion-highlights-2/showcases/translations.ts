@@ -8,43 +8,75 @@ export default {
 		'$label.showcase_1.cta_button.title': 'Claim Offer',
 	},
 	nl: {
-		'$label.showcase_1.blockName': 'Promotie Highlights 2',
-		'$label.showcase_1.eyebrow_text': 'Stijl van Deze Week',
-		'$label.showcase_1.overlay_headline': '40% Korting op een Kenmerkende Linnen Laag',
+		'$label.showcase_1.blockName': 'Promotiehoogtepunten 2',
+		'$label.showcase_1.eyebrow_text': 'Uitgelichte stijl van de week',
+		'$label.showcase_1.overlay_headline': '40% korting op een kenmerkende linnen laag',
 		'$label.showcase_1.description':
-			'Een lichtgewicht basis die je steeds weer zult dragen.\nDe Atelier Jas is nu €120, verlaagd van €200.\nAanbieding eindigt zondag. Geen hervoorraad gegarandeerd.',
-		'$label.showcase_1.cta_button.title': 'Claim Aanbieding',
+			'Een lichtgewicht basis die u veelvuldig zult dragen.\nDe Atelier Coat is nu verkrijgbaar voor € 120, van € 200.\nDe aanbieding eindigt op zondag. Nieuwe voorraad niet gegarandeerd.',
+		'$label.showcase_1.cta_button.title': 'Aanbieding claimen',
 	},
 	fr: {
-		'$label.showcase_1.blockName': 'Mise en Avant Promotionnelle 2',
-		'$label.showcase_1.eyebrow_text': 'Le Style de la Semaine',
-		'$label.showcase_1.overlay_headline': '40% de Réduction sur une Couche de Lin Signature',
+		'$label.showcase_1.blockName': 'Promotions en vedette 2',
+		'$label.showcase_1.eyebrow_text': 'Le style à l\'honneur cette semaine',
+		'$label.showcase_1.overlay_headline': '-40 % sur une blouse en lin signature',
 		'$label.showcase_1.description':
-			'Un essentiel léger que vous porterez encore et encore.\nLe Manteau Atelier est maintenant 120€, réduit de 200€.\nL\'offre se termine dimanche. Pas de réapprovisionnement garanti.',
-		'$label.showcase_1.cta_button.title': 'Réclamer l\'Offre',
+			'Un vêtement de base léger que vous porterez encore et encore.\nLe manteau Atelier est maintenant à 120 €, contre 200 € auparavant.\nL\'offre se termine dimanche. Aucun réapprovisionnement n\'est garanti.',
+		'$label.showcase_1.cta_button.title': 'Profiter de l\'offre',
+	},
+	fr_CA: {
+		'$label.showcase_1.blockName': 'Promotions en vedette 2',
+		'$label.showcase_1.eyebrow_text': 'Le style à l\'honneur cette semaine',
+		'$label.showcase_1.overlay_headline': '- 40 % sur une blouse en lin signature',
+		'$label.showcase_1.description':
+			'Un vêtement de base léger que vous porterez encore et encore.\nLe manteau Atelier est maintenant à 120 $, contre 200 $ auparavant.\nL\'offre se termine dimanche. Aucun réapprovisionnement n\'est garanti.',
+		'$label.showcase_1.cta_button.title': 'Profiter de l\'offre',
 	},
 	de: {
-		'$label.showcase_1.blockName': 'Promotion Highlights 2',
-		'$label.showcase_1.eyebrow_text': 'Der Stil dieser Woche',
-		'$label.showcase_1.overlay_headline': '40% Rabatt auf eine Signature Leinen-Schicht',
+		'$label.showcase_1.blockName': 'Aktions-Highlights 2',
+		'$label.showcase_1.eyebrow_text': 'Der Stil der Woche',
+		'$label.showcase_1.overlay_headline': '40 % Rabatt auf den ausgewählten Leinenmantel',
 		'$label.showcase_1.description':
-			'Ein leichtes Grundstück, das Sie immer wieder tragen werden.\nDer Atelier Mantel ist jetzt 120€, reduziert von 200€.\nAngebot endet Sonntag. Keine Nachlieferung garantiert.',
-		'$label.showcase_1.cta_button.title': 'Angebot Sichern',
+			'Ein leichtes Must-have, das Sie immer wieder tragen werden.\nDer Atelier Coat kostet jetzt nur 120 € statt 200 €.\nDas Angebot endet am Sonntag. Nachbestellungen können nicht garantiert werden.',
+		'$label.showcase_1.cta_button.title': 'Angebot nutzen',
+	},
+	de_CH: {
+		'$label.showcase_1.blockName': 'Aktions-Highlights 2',
+		'$label.showcase_1.eyebrow_text': 'Der Stil der Woche',
+		'$label.showcase_1.overlay_headline': '40 % Rabatt auf den ausgewählten Leinenmantel',
+		'$label.showcase_1.description':
+			'Ein leichtes Must-have, das Sie immer wieder tragen werden.\nDer Atelier Coat kostet jetzt nur 120 € statt 200 €.\nDas Angebot endet am Sonntag. Nachbestellungen können nicht garantiert werden.',
+		'$label.showcase_1.cta_button.title': 'Angebot nutzen',
 	},
 	it: {
-		'$label.showcase_1.blockName': 'Promozione in Evidenza 2',
-		'$label.showcase_1.eyebrow_text': 'Lo Stile della Settimana',
-		'$label.showcase_1.overlay_headline': '40% di Sconto su uno Strato di Lino Signature',
+		'$label.showcase_1.blockName': 'Promozioni in evidenza 2',
+		'$label.showcase_1.eyebrow_text': 'Stile in evidenza questa settimana',
+		'$label.showcase_1.overlay_headline': 'Sconto del 40% sui nostri articoli in lino firmati',
 		'$label.showcase_1.description':
-			'Un capo leggero che indosserai sempre.\nIl Cappotto Atelier è ora €120, ridotto da €200.\nL\'offerta termina domenica. Nessun rifornimento garantito.',
-		'$label.showcase_1.cta_button.title': 'Richiedi Offerta',
+			'Un capo leggerissimo che non smetterai di indossare.\nIl cappotto da atelier ora costa 120 €, il prezzo originale è di 200 €.\nL\'offerta scade domenica. Non sono previste nuove forniture.',
+		'$label.showcase_1.cta_button.title': 'Approfitta dell\'offerta',
+	},
+	pt_BR: {
+		'$label.showcase_1.blockName': 'Promoções em destaque 2',
+		'$label.showcase_1.eyebrow_text': 'Estilo em destaque nesta semana',
+		'$label.showcase_1.overlay_headline': 'Casaco de linho icônico com 40% de desconto',
+		'$label.showcase_1.description':
+			'Uma peça leve e essencial para usar várias vezes.\nO casaco Atelier agora custa $120, em vez de $200.\nA oferta termina no domingo. Sem garantia de reposição.',
+		'$label.showcase_1.cta_button.title': 'Aproveitar a oferta',
 	},
 	es: {
-		'$label.showcase_1.blockName': 'Destacados Promocionales 2',
-		'$label.showcase_1.eyebrow_text': 'El Estilo de Esta Semana',
-		'$label.showcase_1.overlay_headline': '40% de Descuento en una Capa de Lino Exclusiva',
+		'$label.showcase_1.blockName': 'Promociones destacadas 2',
+		'$label.showcase_1.eyebrow_text': 'Estilo destacado de esta semana',
+		'$label.showcase_1.overlay_headline': '40 % de descuento en los artículos destacados de lino',
 		'$label.showcase_1.description':
-			'Un básico ligero que usarás una y otra vez.\nEl Abrigo Atelier ahora cuesta $120, rebajado de $200.\nLa oferta termina el domingo. Sin reabastecimiento garantizado.',
-		'$label.showcase_1.cta_button.title': 'Reclamar Oferta',
+			'Una prenda muy ligera que no querrá quitarse nunca.\nEl abrigo Atelier cuesta ahora 120 € (el precio original era de 200 €).\nLa oferta termina el domingo. No hay previsión de reponer existencias.',
+		'$label.showcase_1.cta_button.title': 'Aprovechar oferta',
+	},
+	es_419: {
+		'$label.showcase_1.blockName': 'Promociones destacadas 2',
+		'$label.showcase_1.eyebrow_text': 'Estilo destacado de esta semana',
+		'$label.showcase_1.overlay_headline': '40 % de descuento en los artículos destacados de lino',
+		'$label.showcase_1.description':
+			'Una prenda muy ligera que no querrá quitarse nunca.\nEl abrigo Atelier cuesta ahora $120 (el precio original era de $200).\nLa oferta termina el domingo. No hay previsión de reponer existencias.',
+		'$label.showcase_1.cta_button.title': 'Aprovechar oferta',
 	},
 } as const

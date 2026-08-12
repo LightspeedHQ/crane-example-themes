@@ -1,8 +1,13 @@
 <template>
 	<div class="catalog-submenu__grid">
-		<!-- Reserve 4 columns for subcategories -->
-		<template v-for="index in 4" :key="index">
-			<div v-if="visibleSubcategories[index - 1]" class="catalog-submenu__column">
+		<!-- Reserve SUBMENU_COLUMN_LIMIT columns for subcategories -->
+		<template v-for="index in SUBMENU_COLUMN_LIMIT" :key="index">
+			<div
+				v-if="visibleSubcategories[index - 1]"
+				class="catalog-submenu__column"
+				role="group"
+				:aria-label="visibleSubcategories[index - 1].name"
+			>
 				<!-- All subcategories are clickable links -->
 				<a
 					:href="visibleSubcategories[index - 1].urlPath || '#'"
@@ -35,40 +40,23 @@ import { toRef } from 'vue'
 import type { Category } from '../../types'
 import { useVisibleSubcategories, useHeaderDesign } from '../../composables'
 import CatalogPromoBanner from '../catalog/CatalogPromoBanner.vue'
+import { SUBMENU_COLUMN_LIMIT } from '../../constants'
 interface CategoryProps {
   category: Category | null;
 }
 const props = defineProps<CategoryProps>()
 
 const visibleSubcategories = useVisibleSubcategories(toRef(props, 'category'))
-const { headerBackgroundColor, headerTextColor, headerFontFamily, headerFontSize } = useHeaderDesign()
+const { headerTextColor } = useHeaderDesign()
 
 </script>
 
 <style scoped lang="scss">
 @use '../../constants' as c;
 
-.catalog-submenu-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: transparent;
-}
-
-.catalog-submenu-overlay__content {
-  position: fixed;
-  left: 0;
-  right: 0;
-  background-color: v-bind(headerBackgroundColor);
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-  padding: 16px;
-  z-index: c.$Z_INDEX_CATALOG_CONTENT;
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
 .catalog-submenu__grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(#{c.$SUBMENU_GRID_COLUMNS}, 1fr);
   gap: 20px;
   align-items: start;
 }
@@ -98,8 +86,8 @@ const { headerBackgroundColor, headerTextColor, headerFontFamily, headerFontSize
 
 .catalog-submenu__header {
   color: v-bind(headerTextColor);
-  font-family: v-bind(headerFontFamily);
-  font-size: v-bind(headerFontSize);
+  font-family: var(--header-font-family, var(--body-font-family));
+  font-size: var(--header-font-size, inherit);
   font-style: inherit;
   font-weight: 700;
   /* Intentionally bold for category headers */
@@ -122,7 +110,7 @@ const { headerBackgroundColor, headerTextColor, headerFontFamily, headerFontSize
     opacity: 0.8;
   }
 
-  &:focus {
+  &:focus-visible {
     outline: 2px solid currentColor;
     outline-offset: 2px;
   }
@@ -144,8 +132,8 @@ const { headerBackgroundColor, headerTextColor, headerFontFamily, headerFontSize
 
 .catalog-submenu__item {
   color: v-bind(headerTextColor);
-  font-family: v-bind(headerFontFamily);
-  font-size: v-bind(headerFontSize);
+  font-family: var(--header-font-family, var(--body-font-family));
+  font-size: var(--header-font-size, inherit);
   font-style: inherit;
   font-weight: inherit;
   line-height: 150%;
@@ -164,7 +152,7 @@ const { headerBackgroundColor, headerTextColor, headerFontFamily, headerFontSize
     opacity: 0.8;
   }
 
-  &:focus {
+  &:focus-visible {
     outline: 2px solid currentColor;
     outline-offset: 2px;
   }

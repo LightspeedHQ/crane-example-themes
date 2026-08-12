@@ -121,7 +121,7 @@ onBeforeUnmount(() => {
   position: fixed;
   inset: 0;
   /* Default background and color, can be overridden by inline styles */
-  background-color: #fff;
+  background-color: var(--bg-color);
   z-index: 1000;
   display: flex;
   flex-direction: column;

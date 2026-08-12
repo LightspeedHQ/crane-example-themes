@@ -83,25 +83,17 @@ export default {
 	design: {
 		section_background: {
 			type: 'BACKGROUND',
-			style: 'COLOR',
-			color: '#FFFFFF',
 		},
 		section_title: {
 			type: 'TEXT',
-			font: 'inter',
-			size: 32,
-			bold: false,
-			italic: false,
-			color: '#000000',
 			visible: true,
 		},
 		cta_button: {
 			type: 'BUTTON',
-			font: 'inter',
+			font: 'global.fontFamily.body',
 			appearance: 'SOLID',
 			size: 'MEDIUM',
 			shape: 'RECTANGLE',
-			color: '#000000',
 		},
 	},
 } as const

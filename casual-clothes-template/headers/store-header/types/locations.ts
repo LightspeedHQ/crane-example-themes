@@ -1,6 +1,6 @@
-import { EditorTypes, InputBoxContent, TextAreaContent } from '@lightspeed/crane'
+import { EditorTypes } from '@lightspeed/crane'
 import { createFieldConfig, field } from '../../../shared/composables'
-import { BaseCard } from '../../../shared/types/type'
+import { BaseCard, InputBoxContent, TextAreaContent } from '../../../shared/types/type'
 
 /**
  * Location card from the locations DECK

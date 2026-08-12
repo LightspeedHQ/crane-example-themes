@@ -7,7 +7,12 @@ defineProps<{
 
 <template>
 	<div v-if="imageUrl" class="gallery-item">
-		<img :src="imageUrl" :alt="altText" class="gallery-item__image" />
+		<img
+			:src="imageUrl"
+			:alt="altText"
+			loading="lazy"
+			class="gallery-item__image"
+		/>
 	</div>
 </template>
 

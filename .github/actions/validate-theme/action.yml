@@ -21,6 +21,17 @@ runs:
       working-directory: ${{ inputs.working-directory }}
       run: npm ci
 
+    - name: Create throwaway crane.config.json
+      shell: bash
+      working-directory: ${{ inputs.working-directory }}
+      run: |
+        cat > crane.config.json << 'EOF'
+        {
+          "app_client_id": "ci-validation-only",
+          "app_secret_key": "ci-validation-only"
+        }
+        EOF
+
     - name: Type check
       shell: bash
       working-directory: ${{ inputs.working-directory }}

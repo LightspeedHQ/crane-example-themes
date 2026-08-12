@@ -1,10 +1,10 @@
 <template>
 	<div class="products-grid">
 		<div class="products-grid__small-group">
-			<ProductCard :product="product1" />
-			<ProductCard :product="product2" />
+			<ProductCard v-if="product1" :product="product1" />
+			<ProductCard v-if="product2" :product="product2" />
 		</div>
-		<ProductCard :product="product3" />
+		<ProductCard v-if="product3" :product="product3" />
 	</div>
 </template>
 
@@ -12,13 +12,11 @@
 
 import ProductCard from './ProductCard.vue'
 import { computed } from 'vue'
-import { ProductView } from '../../../shared/types/product.ts'
 
 const props = defineProps<{
-  products: ProductView[]
+  products: ProductListComponentItem[]
 }>()
 
-// Transform products from API
 const product1 = computed(() => props.products[0])
 const product2 = computed(() => props.products[1])
 const product3 = computed(() => props.products[2])

@@ -14,18 +14,19 @@ export {
 	useHeaderTranslations,
 	getHeaderTranslatedText,
 	useHeaderViewport,
+	useHeaderState,
 } from './core'
+export type { HeaderState } from './core'
 
 // Feature composables
 export {
 	useCategoryTree,
 	useVisibleSubcategories,
 	useCustomerCare,
-	useContactForm,
 	useLanguageSelector,
 	useLocations,
 } from './features'
-export type { Language, ContactFormData, ContactFormErrors, FormState } from './features'
+export type { Language } from './features'
 
 // UI composables
 export {

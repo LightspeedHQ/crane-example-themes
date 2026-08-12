@@ -9,13 +9,6 @@
 			<LocationCard 
 				:location="location" 
 				:view-on-map-text="viewOnMapText"
-				:text-color="textColor"
-				:text-font="textFont"
-				:text-size="textSize"
-				:text-weight="textWeight"
-				:text-style="textStyle"
-				:link-color="linkColor"
-				:link-font="linkFont"
 				:is-selected="index === selectedIndex"
 				@close="$emit('close')" 
 			/>
@@ -31,13 +24,6 @@ interface Props {
   locations: LocationCardType[]
   selectedIndex: number
   viewOnMapText: string
-  textColor: string
-  textFont: string
-  textSize: number
-  textWeight: string
-  textStyle: string
-  linkColor: string
-  linkFont: string
 }
 
 const props = defineProps<Props>()

@@ -11,7 +11,6 @@ export default {
 		type: 'DECK',
 		label: '$label.reviewed_by_you.section_title',
 		addButtonLabel: '$label.reviewed_by_you.add_review_button',
-		placeholder: '$label.reviewed_by_you.reviewer_name.placeholder',
 		maxCards: 5,
 		cards: {
 			defaultCardContent: {
@@ -19,16 +18,19 @@ export default {
 				settings: {
 					reviewedBy: {
 						type: 'INPUTBOX',
-						description: '$label.description',
 						label: '$label.reviewed_by_you.reviewer_name.label',
 						placeholder: '$label.reviewed_by_you.reviewer_name.placeholder',
-						text: '$label.reviewed_by_you.reviewer_name.default',
+						defaults: {
+							text: '$label.reviewed_by_you.reviewer_name.default',
+						},
 					},
 					reviewText: {
 						type: 'TEXTAREA',
 						label: '$label.reviewed_by_you.review_text.label',
 						placeholder: '$label.reviewed_by_you.review_text.placeholder',
-						text: '$label.reviewed_by_you.review_text.default',
+						defaults: {
+							text: '$label.reviewed_by_you.review_text.default',
+						},
 					},
 					rating: {
 						type: 'SELECTBOX',

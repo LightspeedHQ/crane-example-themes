@@ -8,12 +8,17 @@ type BaseLanguage = keyof typeof translations;
 /**
  * Supported language codes including regional variants
  * Base languages: en, nl, fr, de, it, es (have translation files)
- * Regional variants: de_CH (Swiss German), es_419 (Latin American Spanish), pt_BR (Brazilian Portuguese)
+ * Regional variants:
+ *   - fr_CA (Canadian French) falls back to fr
+ *   - de_CH (Swiss German) falls back to de
+ *   - es_419 (Latin American Spanish) falls back to es
+ *   - pt_BR (Brazilian Portuguese) — standalone, no base pt
  *
  * Note: Regional variants will fall back to their base language translations
  */
 export type SupportedLanguage =
   | BaseLanguage
+  | 'fr_CA'
   | 'de_CH'
   | 'es_419'
   | 'pt_BR';
@@ -97,7 +102,8 @@ export function makeLanguageAwareUrl(url: string, language: SupportedLanguage, l
 
 /**
  * Get translation with fallback mechanism
- * Regional variants (e.g., 'de_CH', 'es_419', 'pt_BR') fall back to base language (e.g., 'de', 'es', 'pt')
+ * Regional variants (e.g., 'fr_CA', 'de_CH', 'es_419', 'pt_BR') fall back to base language (e.g., 'fr', 'de', 'es')
+ * Note: pt_BR has no base 'pt' — falls back directly to English
  * @param key - Translation key
  * @param language - Language code (defaults to 'en')
  * @param fallback - Fallback value if translation not found
@@ -116,7 +122,7 @@ export function getTranslation(
 		}
 	}
 
-	// For regional variants (e.g., 'de_CH' → 'de'), try base language
+	// For regional variants (e.g., 'de_CH' → 'de', 'fr_CA' → 'fr'), try base language
 	if (language.includes('_')) {
 		const baseLanguage = language.split('_')[0] as BaseLanguage
 		if (baseLanguage in translations) {

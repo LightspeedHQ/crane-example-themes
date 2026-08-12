@@ -10,17 +10,29 @@ export default {
 	// KEY INFO BAR DESIGN
 	// ========================================
 	/**
-   * Key Info Bar Text Styling
-   * Controls the typography and appearance of the key info bar text
-   */
+	 * Key Info Bar Text Styling
+	 * Controls the typography and appearance of the key info bar text
+	 */
 	KeyInfoBarText: {
 		type: 'TEXT',
 		label: '$label.key_info_bar_text.label',
-		colors: ['#000000', '#FFFFFF', '#F5F5F5', '#EEEEEE', '#CCCCCC', '#999999', '#666666', '#333333', '#1E1E21'],
-		sizes: [12, 13, 14, 15, 16, 17, 18],
+		colors: [
+			'#000000',
+			'#FFFFFF',
+			'#F5F5F5',
+			'#EEEEEE',
+			'#CCCCCC',
+			'#999999',
+			'#666666',
+			'#333333',
+			'#1E1E21',
+		],
+		sizes: [
+			10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 36, 40, 48, 56, 64, 72, 80, 88, 96, 104,
+			112, 120,
+		],
 		defaults: {
 			font: 'global.fontFamily.body',
-			size: 14,
 			bold: false,
 			italic: false,
 			color: '#FFFFFF',
@@ -28,136 +40,185 @@ export default {
 		},
 	},
 	/**
-   * Key Info Bar Background
-   * Controls the background color/style of the key info bar
-   */
+	 * Key Info Bar Background
+	 * Controls the background color/style of the key info bar
+	 */
 	KeyInfoBarBackground: {
 		type: 'BACKGROUND',
 		label: '$label.key_info_bar_background.label',
-		colors: ['#000000', '#FFFFFF', '#F5F5F5', '#EEEEEE', '#CCCCCC', '#999999', '#666666', '#333333', '#1E1E21'],
+		colors: [
+			'#000000',
+			'#FFFFFF',
+			'#F5F5F5',
+			'#EEEEEE',
+			'#CCCCCC',
+			'#999999',
+			'#666666',
+			'#333333',
+			'#1E1E21',
+		],
 		defaults: {
 			style: 'COLOR',
 			color: '#000000',
 		},
 	},
-  
+
 	// ========================================
 	// HEADER MAIN DESIGN
 	// ========================================
 	/**
-   * Header Background
-   * Controls the main background color/style of the header
-   */
+	 * Header Background
+	 * Controls the main background color/style of the header
+	 */
 	HeaderBackground: {
 		type: 'BACKGROUND',
 		label: '$label.header_background.label',
-		colors: ['#000000', '#FFFFFF', '#F5F5F5', '#EEEEEE', '#CCCCCC', '#999999', '#666666', '#333333', '#1E1E21'],
-		defaults: { style: 'COLOR', color: '#FFFFFF' },
+		colors: [
+			'#000000',
+			'#FFFFFF',
+			'#F5F5F5',
+			'#EEEEEE',
+			'#CCCCCC',
+			'#999999',
+			'#666666',
+			'#333333',
+			'#1E1E21',
+		],
+		defaults: {},
 	},
 	/**
-   * Header Text Styling
-   * Controls the typography and appearance of header text elements
-   */
+	 * Header Text Styling
+	 * Controls the typography and appearance of header text elements
+	 */
 	HeaderText: {
 		type: 'TEXT',
 		label: '$label.header_text.label',
-		colors: ['#000000', '#FFFFFF', '#F5F5F5', '#EEEEEE', '#CCCCCC', '#999999', '#666666', '#333333', '#1E1E21'],
-		sizes: [12, 13, 14, 15, 16, 17, 18, 19, 20],
+		colors: [
+			'#000000',
+			'#FFFFFF',
+			'#F5F5F5',
+			'#EEEEEE',
+			'#CCCCCC',
+			'#999999',
+			'#666666',
+			'#333333',
+			'#1E1E21',
+		],
+		sizes: [
+			10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 36, 40, 48, 56, 64, 72, 80, 88, 96, 104,
+			112, 120,
+		],
 		defaults: {
 			font: 'global.fontFamily.body',
-			size: 16,
 			bold: false,
 			italic: false,
-			color: '#1E1E21',
+			color: 'global.color.body',
 			visible: true,
 		},
 	},
-  
+
 	// ========================================
 	// HEADER ELEMENT TOGGLES
 	// ========================================
 	/**
-   * Key Info Bar Toggle
-   * Controls whether the key info bar is displayed
-   */
+	 * Key Info Bar Toggle
+	 * Controls whether the key info bar is displayed
+	 */
 	HeaderKeyInfoBar: {
 		type: 'TOGGLE',
 		label: '$label.key_info_bar.label',
-		description: '$label.key_info_bar.description',
 		defaults: {
 			enabled: true,
 		},
 	},
 	/**
-   * Language Switcher Toggle
-   * Controls whether the language switcher is displayed
-   */
+	 * Language Switcher Toggle
+	 * Controls whether the language switcher is displayed
+	 */
 	HeaderLanguageSwitcher: {
 		type: 'TOGGLE',
 		label: '$label.language_switcher.label',
-		description: '$label.language_switcher.description',
 		defaults: {
 			enabled: true,
 		},
 	},
 	/**
-   * Account Button Toggle
-   * Controls whether the account/login button is displayed
-   */
+	 * Account Button Toggle
+	 * Controls whether the account/login button is displayed
+	 */
 	HeaderAccount: {
 		type: 'TOGGLE',
 		label: '$label.account.label',
-		description: '$label.account.description',
 		defaults: {
 			enabled: true,
 		},
 	},
 	/**
-   * Wishlist Button Toggle
-   * Controls whether the wishlist/favorites button is displayed
-   */
+	 * Wishlist Button Toggle
+	 * Controls whether the wishlist/favorites button is displayed
+	 */
 	HeaderWishlist: {
 		type: 'TOGGLE',
 		label: '$label.wishlist.label',
-		description: '$label.wishlist.description',
 		defaults: {
 			enabled: true,
 		},
 	},
 	/**
-   * Cart Button Toggle
-   * Controls whether the shopping cart button is displayed
-   */
+	 * Cart Button Toggle
+	 * Controls whether the shopping cart button is displayed
+	 */
 	HeaderCart: {
 		type: 'TOGGLE',
 		label: '$label.cart.label',
-		description: '$label.cart.description',
 		defaults: {
 			enabled: true,
 		},
 	},
 	/**
-   * Categories Menu Toggle
-   * Controls whether the categories menu is displayed
-   */
+	 * Categories Menu Toggle
+	 * Controls whether the categories menu is displayed
+	 */
 	HeaderCategories: {
 		type: 'TOGGLE',
 		label: '$label.categories.label',
-		description: '$label.categories.description',
 		defaults: {
 			enabled: true,
 		},
 	},
 	/**
-   * Search Button Toggle
-   * Controls whether the search button is displayed
-   */
+	 * Search Button Toggle
+	 * Controls whether the search button is displayed
+	 */
 	HeaderSearch: {
 		type: 'TOGGLE',
 		label: '$label.search.label',
-		description: '$label.search.description',
 		defaults: {
 			enabled: true,
+		},
+	},
+
+	// ========================================
+	// LOGO DESIGN
+	// ========================================
+	/**
+	 * Logo
+	 * Controls the logo displayed in the header
+	 */
+	logo: {
+		type: 'LOGO',
+		label: '$label.logo.label',
+		defaults: {
+			font: 'global.fontFamily.title',
+			size: 20,
+			bold: true,
+			italic: false,
+			color: 'global.color.title',
+			frame: {
+				visible: false,
+				width: 3,
+				color: '#313131',
+			},
 		},
 	},
 
@@ -165,37 +226,35 @@ export default {
 	// LOCATIONS SETTINGS
 	// ========================================
 	/**
-   * Locations Visibility Toggle
-   * Controls whether the store locations feature is displayed
-   */
+	 * Locations Visibility Toggle
+	 * Controls whether the store locations feature is displayed
+	 */
 	LocationsVisibility: {
 		type: 'TOGGLE',
 		label: '$label.locations_visibility.label',
-		description: '$label.locations_visibility.description',
 		defaults: {
 			enabled: true,
 		},
 	},
 
 	/**
-   * Locations Map Display Toggle
-   * Controls whether the embedded map is shown with locations
-   */
+	 * Locations Map Display Toggle
+	 * Controls whether the embedded map is shown with locations
+	 */
 	LocationsMapDisplay: {
 		type: 'TOGGLE',
 		label: '$label.locations_map_display.label',
-		description: '$label.locations_map_display.description',
 		defaults: {
 			enabled: true,
 		},
 	},
 
 	/**
-   * Locations Map Zoom Level
-   * Controls the initial zoom level of the embedded map
-   * Options range from world view (1) to building level (21)
-   * Recommended: 12 for city view, 15 for street level, 18 for building view
-   */
+	 * Locations Map Zoom Level
+	 * Controls the initial zoom level of the embedded map
+	 * Options range from world view (1) to building level (21)
+	 * Recommended: 12 for city view, 15 for street level, 18 for building view
+	 */
 	LocationsMapZoom: {
 		type: 'SELECTBOX',
 		label: '$label.locations_map_zoom.label',
@@ -217,13 +276,12 @@ export default {
 	// CUSTOMER CARE SETTINGS
 	// ========================================
 	/**
-   * Customer Care Visibility Toggle
-   * Controls whether the customer care feature is displayed
-   */
+	 * Customer Care Visibility Toggle
+	 * Controls whether the customer care feature is displayed
+	 */
 	CustomerCareVisibility: {
 		type: 'TOGGLE',
 		label: '$label.customer_care_visibility.label',
-		description: '$label.customer_care_visibility.description',
 		defaults: {
 			enabled: true,
 		},
@@ -233,13 +291,12 @@ export default {
 	// CATALOG PROMO BANNER SETTINGS
 	// ========================================
 	/**
-   * Catalog Promo Banner Visibility Toggle
-   * Controls whether the promotional banner is displayed in the catalog submenu
-   */
+	 * Catalog Promo Banner Visibility Toggle
+	 * Controls whether the promotional banner is displayed in the catalog submenu
+	 */
 	CatalogPromoBannerVisibility: {
 		type: 'TOGGLE',
 		label: '$label.catalog_promo_banner_visibility.label',
-		description: '$label.catalog_promo_banner_visibility.description',
 		defaults: {
 			enabled: true,
 		},

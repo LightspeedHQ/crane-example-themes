@@ -26,18 +26,14 @@ import {
 } from '../../types/customer-care'
 
 const { translate } = useHeaderTranslations()
-const { headerTextColor, headerFontFamily, headerFontSize } = useHeaderDesign()
+const { headerTextColor } = useHeaderDesign()
 
-// Access DECK from content settings
 const usefulLinksDeckRaw = useDeckElementContent<Content>('UsefulLinks')
-
-// Map DECK cards with proper types
 const usefulLinksCards = useMappedDeckCards<UsefulLinksCard, Content>(
 	usefulLinksDeckRaw,
 	UsefulLinksDeckConfig,
 )
 
-// Useful Links from settings
 const usefulLinks = computed(() => {
 	return usefulLinksCards.value.map((card) => ({
 		title: card.link_title?.value || '',
@@ -57,7 +53,7 @@ const usefulLinks = computed(() => {
 
 	&__section-title {
 		color: v-bind(headerTextColor);
-		font-family: v-bind(headerFontFamily);
+		font-family: var(--header-font-family, var(--body-font-family));
 		font-size: clamp(16px, 1.5vw, 18px);
 		font-weight: 700;
 		line-height: 150%;
@@ -68,8 +64,8 @@ const usefulLinks = computed(() => {
 
 	&__section-link {
 		color: v-bind(headerTextColor);
-		font-family: v-bind(headerFontFamily);
-		font-size: v-bind(headerFontSize);
+		font-family: var(--header-font-family, var(--body-font-family));
+		font-size: inherit;
 		font-weight: 400;
 		line-height: 150%;
 		letter-spacing: -0.08px;

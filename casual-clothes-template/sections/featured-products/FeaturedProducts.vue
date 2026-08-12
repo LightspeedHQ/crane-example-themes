@@ -5,22 +5,13 @@
 			:description="sectionDescription"
 			:title-design="sectionTitleDesign"
 			:description-design="sectionDescriptionDesign"
-		/>
-
-		<!-- Loading State -->
-		<LoadingSkeleton v-if="isLoading" />
-
-		<!-- Error State -->
-		<ErrorState
-			v-else-if="hasError"
-			:message="errorMessage"
-			:title="t('$label.error.title')"
-			:default-message="t('$label.error.message')"
+			:raw-title-design="rawDesign?.section_title"
+			:raw-description-design="rawDesign?.section_description"
 		/>
 
 		<!-- Empty State -->
 		<EmptyState
-			v-else-if="products.length === 0"
+			v-if="!productSelectorContent.hasProducts"
 			:title="t('$label.empty.title')"
 			:message="t('$label.empty.message')"
 		/>
@@ -28,7 +19,7 @@
 		<!-- Products grid -->
 		<ProductsGrid
 			v-else
-			:products="products"
+			:products="orderedProducts"
 		/>
 	</SectionWrapper>
 </template>
@@ -38,33 +29,37 @@ import {
 	useInputboxElementContent,
 	useBackgroundElementDesign,
 	useTextElementDesign,
+	useProductSelectorElementContent,
+	useVueBaseProps,
 } from '@lightspeed/crane'
 import type { Content, Design } from './type'
 import translations from './settings/translations'
 import SectionWrapper from '../../shared/components/SectionWrapper.vue'
 import SectionHeader from '../../shared/components/SectionHeader.vue'
 import EmptyState from '../../shared/components/EmptyState.vue'
-import ErrorState from '../../shared/components/ErrorState.vue'
-import { useProducts, useBackgroundStyle, useTranslations } from '../../shared/composables'
-import { PRODUCTS_LIMITS } from '../../shared/constants'
-import LoadingSkeleton from './components/LoadingSkeleton.vue'
+import { useTranslations, useOrderedSelectorProducts } from '../../shared/composables'
+import { useColorPresetVars } from '../../shared/composables/design'
+import { createBackgroundVars } from '../../shared/utils/design-vars'
 import ProductsGrid from './components/ProductsGrid.vue'
+import { computed } from 'vue'
 
-// Translation helper with current language
 const { t } = useTranslations(translations)
+const productSelectorContent = useProductSelectorElementContent<Content>('featured_products')
 
-// Fetch real products from store
-const { products, isLoading, hasError, errorMessage } = useProducts<Content, Design>(() => true, PRODUCTS_LIMITS.FEATURED)
+const orderedProducts = useOrderedSelectorProducts(productSelectorContent, 'featured_products')
 
-// Content
 const sectionTitle = useInputboxElementContent<Content>('section_title')
 const sectionDescription = useInputboxElementContent<Content>('section_description')
 
-// Background style using shared composable
 const backgroundDesign = useBackgroundElementDesign<Design>('background') as BackgroundDesignData
-const backgroundStyle = useBackgroundStyle(backgroundDesign)
 
-// Design elements
 const sectionTitleDesign = useTextElementDesign<Design>('section_title') as TextDesignData
 const sectionDescriptionDesign = useTextElementDesign<Design>('section_description') as TextDesignData
+
+const { design: rawDesign } = useVueBaseProps<unknown, Design>()
+const colorPresetVars = useColorPresetVars(rawDesign)
+const backgroundStyle = computed(() => ({
+	...Object.fromEntries(createBackgroundVars('section', backgroundDesign, rawDesign.value?.background)),
+	...colorPresetVars.value,
+}))
 </script>

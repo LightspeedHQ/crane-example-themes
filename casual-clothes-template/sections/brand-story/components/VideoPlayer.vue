@@ -11,15 +11,10 @@
 </template>
 
 <script setup lang="ts">
-import { useYouTubePlayer } from '../composables/use-youtube-player.ts'
-import { ref } from 'vue'
-
-const props = defineProps<{
-  videoUrl: string
+defineProps<{
+  playerId: string
+  hasPlayedOnce: boolean
 }>()
-
-// YouTube player (client-only)
-const { playerId, hasPlayedOnce } = useYouTubePlayer(ref(props.videoUrl))
 </script>
 
 <style scoped lang="scss">

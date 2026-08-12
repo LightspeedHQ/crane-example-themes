@@ -44,10 +44,13 @@ import { ref, computed } from 'vue'
 import {
 	useDeckElementContent,
 	useBackgroundElementDesign,
+	useVueBaseProps,
 } from '@lightspeed/crane'
 import GalleryItem from './components/GalleryItem.vue'
 import NavigationButtons from '../../shared/components/NavigationButtons.vue'
-import { useCarousel, useBackgroundStyle, useTranslations, useMappedDeckCards } from '../../shared/composables'
+import { useCarousel, useTranslations, useMappedDeckCards } from '../../shared/composables'
+import { useColorPresetVars } from '../../shared/composables/design'
+import { createBackgroundVars } from '../../shared/utils/design-vars'
 import { GalleryItemCard, GalleryItemDeckConfig } from './types'
 import translations from './settings/translations'
 import type { Content, Design } from './type'
@@ -57,21 +60,25 @@ import { mapGalleryItem } from './utils/utils.ts'
 
 const { t } = useTranslations(translations)
 
+const { design: rawDesign } = useVueBaseProps<unknown, Design>()
+
 const galleryItemsDeck = useDeckElementContent<Content>('gallery_items')
 
 const sectionBackgroundDesign = useBackgroundElementDesign<Design>('section_background') as BackgroundDesignData
+const colorPresetVars = useColorPresetVars(rawDesign)
 
-const sectionBackgroundStyle = useBackgroundStyle(sectionBackgroundDesign)
+const sectionBackgroundStyle = computed(() => ({
+	...Object.fromEntries(createBackgroundVars('section', sectionBackgroundDesign, rawDesign.value?.section_background)),
+	...colorPresetVars.value,
+}))
 
 const mappedGalleryItems = useMappedDeckCards<GalleryItemCard, Content>(
 	galleryItemsDeck,
 	GalleryItemDeckConfig,
 )
 
-// Transform gallery items to component props
 const galleryItems = computed(() => mappedGalleryItems.value.map(mapGalleryItem))
 
-// Gallery navigation
 const gallery = ref<HTMLElement | null>(null)
 const totalItems = computed(() => galleryItems.value.length)
 const { prevDisabled, nextDisabled, scrollCarousel, shouldShowControls, hasOverflow } = useCarousel(gallery, {
@@ -86,6 +93,7 @@ const { prevDisabled, nextDisabled, scrollCarousel, shouldShowControls, hasOverf
 .promotion-highlights-3 {
 	width: 100%;
 	padding: 32px 8px;
+	background: var(--section-background, var(--bg-color));
 	display: flex;
 	flex-direction: column;
 	align-items: center;

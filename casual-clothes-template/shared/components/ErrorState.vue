@@ -40,7 +40,7 @@ defineProps<Props>()
 
 .error-state__message {
 	font-size: 16px;
-	color: #666666;
+	color: var(--fg-muted-color);
 	line-height: 1.5;
 	margin: 0;
 }

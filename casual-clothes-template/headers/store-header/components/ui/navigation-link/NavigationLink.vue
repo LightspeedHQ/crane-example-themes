@@ -10,6 +10,7 @@
 			:class="[linkClass, { 'navigation-link--disabled': isPreviewMode }]"
 			:title="description"
 			:aria-label="description ? `${linkText}: ${description}` : linkText"
+			:aria-expanded="ariaExpanded"
 			@click="handleClick"
 		>
 			<slot>
@@ -33,6 +34,8 @@ interface Props {
   uppercase?: boolean;
   variant?: 'default' | 'button' | 'icon';
   linkClass?: string;
+  /** Pass true/false when this link acts as a dropdown trigger (announces expanded state to screen readers) */
+  ariaExpanded?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {

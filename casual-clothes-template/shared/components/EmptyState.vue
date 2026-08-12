@@ -33,13 +33,13 @@ defineProps<Props>()
 .empty-state__title {
 	font-size: 24px;
 	font-weight: 600;
-	color: #000000;
+	color: var(--fg-color);
 	margin: 0 0 12px 0;
 }
 
 .empty-state__message {
 	font-size: 16px;
-	color: #666666;
+	color: var(--fg-muted-color);
 	line-height: 1.5;
 	margin: 0;
 }

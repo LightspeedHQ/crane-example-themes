@@ -1,10 +1,10 @@
 <template>
 	<div v-if="hasContent" class="mobile-header-bottom__wrapper">
 		<div class="mobile-header-bottom">
-			<button 
-				v-if="categoriesShow.enabled" 
-				class="mobile-header-bottom__catalog-btn" 
-				@click="$emit('toggle-catalog')"
+			<button
+				v-if="categoriesShow.enabled"
+				class="mobile-header-bottom__catalog-btn"
+				@click="toggleMobileCatalogOverlay"
 			>
 				{{ catalogLabel }}
 			</button>
@@ -16,15 +16,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import Search from '../user/Search.vue'
-import { useHeaderToggles, useHeaderTranslations, useHeaderDesign } from '../../composables'
+import { useHeaderToggles, useHeaderTranslations, useHeaderDesign, useHeaderState } from '../../composables'
 
-defineEmits<{
-	(e: 'toggle-catalog'): void
-}>()
+const { toggleMobileCatalogOverlay } = useHeaderState()
 
 const { searchShow, categoriesShow } = useHeaderToggles()
 const { translations } = useHeaderTranslations()
-const { headerTextColor, headerFontFamily, headerFontSize } = useHeaderDesign()
+const { headerTextColor } = useHeaderDesign()
 
 const catalogLabel = translations.catalog
 
@@ -58,9 +56,9 @@ const hasContent = computed(() => {
   background: none;
   border: none;
   color: v-bind(headerTextColor);
-  font-family: v-bind(headerFontFamily);
+  font-family: var(--header-font-family, var(--body-font-family));
   font-weight: 700;
-  font-size: v-bind(headerFontSize);
+  font-size: var(--header-font-size, inherit);
   cursor: pointer;
   padding: 0;
   transition: opacity 0.2s ease;

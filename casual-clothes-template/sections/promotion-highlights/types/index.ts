@@ -1,6 +1,6 @@
-import { EditorTypes, ImageContent, InputBoxContent, SelectBoxContent } from '@lightspeed/crane'
+import { EditorTypes } from '@lightspeed/crane'
 import { createFieldConfig, field } from '../../../shared/composables'
-import { BaseCard } from '../../../shared/types/type.ts'
+import { BaseCard, ImageContent, InputBoxContent, SelectBoxContent } from '../../../shared/types/type.ts'
 
 /**
  * Product card with all the details

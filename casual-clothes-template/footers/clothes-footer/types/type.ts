@@ -1,10 +1,11 @@
-import { BaseCard } from '../../../shared/types/type.ts'
 import {
+	BaseCard,
 	ButtonContent,
-	EditorTypes, ImageContent,
+	ImageContent,
 	InputBoxContent,
 	SelectBoxContent,
-} from '@lightspeed/crane'
+} from '../../../shared/types/type.ts'
+import { EditorTypes } from '@lightspeed/crane'
 import { createFieldConfig, field } from '../../../shared/composables'
 import { ComputedRef, InjectionKey } from 'vue'
 
@@ -35,6 +36,13 @@ interface LinksGroupContext {
     companyCares:  ComputedRef<LinksGroup[]>,
 }
 
+interface MadeWith {
+    poweredBy?: string;
+    company?: string;
+    url?: string;
+    target?: string;
+}
+
 interface SiteInfoContext {
     copyrightNotice: InputBoxContent,
     contactUsTitle: InputBoxContent,
@@ -42,6 +50,7 @@ interface SiteInfoContext {
     contactUsMail: ButtonContent,
     legalAndTechnicalLinks: ComputedRef<LinksGroup[]>
     socialMediaLinks: ComputedRef<SocialMediaLink[]>
+    madeWith?: MadeWith
 }
 
 interface SiteDesign {
@@ -49,6 +58,9 @@ interface SiteDesign {
     link: TextDesignData,
     background: BackgroundDesignData
     footerTextDesign: TextDesignData
+    rawTitle?: ComputedRef<unknown>
+    rawLink?: ComputedRef<unknown>
+    rawFooterText?: ComputedRef<unknown>
 }
 
 interface FooterImageContext{

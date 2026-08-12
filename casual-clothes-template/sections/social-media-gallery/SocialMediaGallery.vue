@@ -1,5 +1,5 @@
 <template>
-	<section class="social-media-gallery" :style="sectionBackgroundStyle">
+	<section class="social-media-gallery" :style="sectionVars">
 		<div class="social-media-gallery__wrapper">
 			<MediaHeader />
 
@@ -17,7 +17,6 @@
 						:image-url="item.imageUrl"
 						:username="item.username"
 						:alt-text="item.altText"
-						:username-style="usernameStyle"
 					/>
 				</div>
 
@@ -45,28 +44,29 @@ import {
 	useDeckElementContent,
 	useBackgroundElementDesign,
 	useTextElementDesign,
+	useVueBaseProps,
 } from '@lightspeed/crane'
 import GalleryItem from './components/GalleryItem.vue'
 import NavigationButtons from '../../shared/components/NavigationButtons.vue'
-import { useCarousel, useBackgroundStyle, useTranslations, useMappedDeckCards } from '../../shared/composables'
+import { useCarousel, useTranslations, useMappedDeckCards } from '../../shared/composables'
+import { useColorPresetVars } from '../../shared/composables/design'
 import { isValidImageUrl } from '../../shared/utils'
+import { createBackgroundVars, createTextVars } from '../../shared/utils/design-vars'
+import type { Content, Design } from './type'
 import { GalleryItemCard, GalleryItemDeckConfig } from './types'
 import translations from './settings/translations'
-import type { Content, Design } from './type'
-import { createTextStyle } from '../../shared/utils'
 import MediaHeader from './components/MediaHeader.vue'
 
-// Translation helper with current language
 const { t } = useTranslations(translations)
 
-// Content - Gallery items from DECK
+const { design: rawDesign } = useVueBaseProps<unknown, Design>()
+
 const galleryItemsDeck = useDeckElementContent<Content>('gallery_items')
 const mappedGalleryItems = useMappedDeckCards<GalleryItemCard, Content>(
 	galleryItemsDeck,
 	GalleryItemDeckConfig,
 )
 
-// Transform gallery items to component props
 const galleryItems = computed(() => {
 	return mappedGalleryItems.value.map((item) => ({
 		id: item.id,
@@ -76,17 +76,18 @@ const galleryItems = computed(() => {
 	}))
 })
 
-// Design
 const sectionBackgroundDesign = useBackgroundElementDesign<Design>('section_background') as BackgroundDesignData
 const usernameDesign = useTextElementDesign<Design>('gallery_item_username') as TextDesignData
+const colorPresetVars = useColorPresetVars(rawDesign)
 
-// Background style using shared composable
-const sectionBackgroundStyle = useBackgroundStyle(sectionBackgroundDesign)
+const sectionVars = computed(() => ({
+	...Object.fromEntries([
+		...createBackgroundVars('section', sectionBackgroundDesign, rawDesign.value?.section_background),
+		...createTextVars('gallery-username', usernameDesign, rawDesign.value?.gallery_item_username),
+	]),
+	...colorPresetVars.value,
+}))
 
-// Text styles using shared utility
-const usernameStyle = computed(() => createTextStyle(usernameDesign, { defaultSize: 16 }))
-
-// Gallery navigation
 const gallery = ref<HTMLElement | null>(null)
 const totalItems = computed(() => galleryItems.value.length)
 const { prevDisabled, nextDisabled, scrollCarousel, shouldShowControls, hasOverflow } = useCarousel(gallery, {
@@ -101,7 +102,7 @@ const { prevDisabled, nextDisabled, scrollCarousel, shouldShowControls, hasOverf
 .social-media-gallery {
 	width: 100%;
 	padding: 32px 8px;
-	background: white;
+	background: var(--section-background, var(--bg-color));
 	display: flex;
 	flex-direction: column;
 	align-items: center;

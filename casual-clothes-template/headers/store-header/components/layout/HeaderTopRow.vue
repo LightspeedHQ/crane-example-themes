@@ -3,9 +3,7 @@
 		<div class="header-top-row__left">
 			<CustomLogo></CustomLogo>
 
-			<NavigationMenu
-				@open-find-store="$emit('open-find-store')"
-				@open-customer-care="$emit('open-customer-care')" />
+			<NavigationMenu />
 		</div>
 		<div class="header-top-row__right">
 			<LanguageSelector v-if="languageSwitcherShow.enabled" />
@@ -25,23 +23,20 @@ import NavigationMenu from '../navigation/NavigationMenu.vue'
 import { useHeaderToggles } from '../../composables'
 import CustomLogo from './CustomLogo.vue'
 
-defineEmits<{
-	(e: 'open-find-store'): void
-	(e: 'open-customer-care'): void
-}>()
-
 const { languageSwitcherShow, accountShow, wishlistShow, cartShow } = useHeaderToggles()
 </script>
 
 <style scoped lang="scss">
+@use '../../constants' as c;
+
 .header-top-row {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	height: 40px;
+	height: c.$HEADER_ROW_HEIGHT;
 	/* Inherit background from parent header */
 	gap: 1rem;
-	min-height: 40px;
+	min-height: c.$HEADER_ROW_HEIGHT;
 }
 
 .header-top-row__left {
