@@ -13,26 +13,34 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import {
 	useBackgroundElementDesign,
+	useVueBaseProps,
 } from '@lightspeed/crane'
-import { useBackgroundStyle } from '../../shared/composables'
+import { createBackgroundVars } from '../../shared/utils/design-vars'
+import { useColorPresetVars } from '../../shared/composables/design'
 import type { Design } from './type'
 import EyebrowText from './components/EyebrowText.vue'
 import HighlightImage from './components/HighlightImage.vue'
 import HighlightDescription from './components/HighlightDescription.vue'
 import HighlightCTA from './components/HighlightCTA.vue'
 
+const { design: rawDesign } = useVueBaseProps<unknown, Design>()
 const sectionBackgroundDesign = useBackgroundElementDesign<Design>('section_background') as BackgroundDesignData
+const colorPresetVars = useColorPresetVars(rawDesign)
 
-const sectionStyle = useBackgroundStyle(sectionBackgroundDesign)
+const sectionStyle = computed(() => ({
+	...Object.fromEntries(createBackgroundVars('section', sectionBackgroundDesign, rawDesign.value?.section_background)),
+	...colorPresetVars.value,
+}))
 </script>
 
 <style scoped lang="scss">
 .promotion-highlights-2 {
 	width: 100%;
 	padding: 32px 8px;
-	background-color: #ffffff;
+	background: var(--section-background, var(--bg-color));
 
   &__container {
     display: flex;

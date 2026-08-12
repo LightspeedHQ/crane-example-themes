@@ -17,9 +17,6 @@ export default {
 		type: 'INPUTBOX',
 		label: '$label.key_info_bar_content.label',
 		placeholder: '$label.key_info_bar_content.placeholder',
-		validation: {
-			text: { required: false, maxLength: 200 },
-		},
 	},
 
 	// ========================================
@@ -31,8 +28,17 @@ export default {
   */
 	logo: {
 		type: 'LOGO',
-		logoType: 'TEXT',
 		label: '$label.logo.label',
+		defaults: {
+			logoType: 'TEXT',
+		},
+	},
+
+	/**
+	 * Navigation Menu
+	 */
+	menu: {
+		type: 'NAVIGATION_MENU',
 	},
 
 	// Divider: Separates logo from navigation sections
@@ -52,11 +58,6 @@ export default {
 		type: 'INPUTBOX',
 		label: '$label.locations_link.label',
 		placeholder: '$label.locations_link.placeholder',
-		validation: {
-			required: true,
-			minLength: 1,
-			maxLength: 20,
-		},
 	},
 
 	/**
@@ -100,11 +101,6 @@ export default {
 		type: 'INPUTBOX',
 		label: '$label.view_on_map_text.label',
 		placeholder: '$label.view_on_map_text.placeholder',
-		validation: {
-			required: true,
-			minLength: 1,
-			maxLength: 20,
-		},
 	},
 
 	// Divider: Separates locations from customer care
@@ -124,11 +120,6 @@ export default {
 		type: 'INPUTBOX',
 		label: '$label.customer_care_link.label',
 		placeholder: '$label.customer_care_link.placeholder',
-		validation: {
-			required: true,
-			minLength: 1,
-			maxLength: 20,
-		},
 	},
 
 	/**
@@ -198,7 +189,10 @@ export default {
 	HeaderAboutLink: {
 		type: 'BUTTON',
 		label: '$label.about_link.label',
-		buttonType: 'GO_TO_STORE_LINK',
+		defaults: {
+			title: '$label.about_link.label',
+			buttonType: 'GO_TO_STORE_LINK',
+		},
 	},
 
 	// Divider: Separates about from catalog promo settings
@@ -218,21 +212,23 @@ export default {
 		type: 'IMAGE',
 		label: '$label.catalog_promo_image.label',
 		defaults: {
-			set: {
-				MOBILE_WEBP_LOW_RES: {
-					url: 'example-promo-banner.png',
+			imageData: {
+				set: {
+					MOBILE_WEBP_LOW_RES: {
+						url: 'example-promo-banner.png',
+					},
+					MOBILE_WEBP_HI_RES: {
+						url: 'example-promo-banner.png',
+					},
+					WEBP_LOW_RES: {
+						url: 'example-promo-banner.png',
+					},
+					WEBP_HI_2X_RES: {
+						url: 'example-promo-banner.png',
+					},
 				},
-				MOBILE_WEBP_HI_RES: {
-					url: 'example-promo-banner.png',
-				},
-				WEBP_LOW_RES: {
-					url: 'example-promo-banner.png',
-				},
-				WEBP_HI_2X_RES: {
-					url: 'example-promo-banner.png',
-				},
+				borderInfo: {},
 			},
-			borderInfo: {},
 		},
 	},
 
@@ -242,7 +238,6 @@ export default {
 	CatalogPromoLink: {
 		type: 'BUTTON',
 		label: '$label.catalog_promo_link.label',
-		description: '$label.catalog_promo_link.description',
 	},
 
 } as const

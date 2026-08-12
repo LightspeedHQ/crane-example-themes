@@ -3,7 +3,6 @@ export default {
 		type: 'INPUTBOX',
 		label: '$label.video_url.label',
 		placeholder: '$label.video_url.placeholder',
-		description: '$label.video_url.description',
 	},
 	section_title: {
 		type: 'INPUTBOX',
@@ -33,7 +32,9 @@ export default {
 	cta_button: {
 		type: 'BUTTON',
 		label: '$label.cta_button.label',
-		title: '$label.cta_button.defaults.title',
-		buttonType: 'GO_TO_STORE_LINK',
+		defaults: {
+			title: '$label.cta_button.defaults.title',
+			buttonType: 'GO_TO_STORE_LINK',
+		},
 	},
 } as const

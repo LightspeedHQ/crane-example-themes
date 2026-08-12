@@ -75,10 +75,9 @@ Check for details [Quickstart with a Site theme example](https://docs.ecwid.com/
 │
 ├── shared/                 # Reusable code
 │   ├── components/         # Vue components
-│   ├── composables/        # Vue composables
+│   ├── composables/        # Vue composables (ui/, crane/, design/)
 │   ├── utils/              # Helper functions
-│   ├── types/              # TypeScript types
-│   └── constants/          # Shared constants
+│   └── types/              # TypeScript types
 │
 ├── package.json
 ├── tsconfig.json
@@ -208,8 +207,8 @@ export type Design = typeof design
 ```vue
 <!-- sections/my-section/MySection.vue -->
 <template>
-  <section class="my-section" :style="backgroundStyle">
-    <h2 class="my-section__title" :style="titleStyle">
+  <section class="my-section" :style="[backgroundStyle, colorPresetVars]">
+    <h2 class="my-section__title">
       {{ content.title }}
     </h2>
     <img 
@@ -221,14 +220,14 @@ export type Design = typeof design
 </template>
 
 <script setup lang="ts">
-import { useCraneSection } from '@lightspeed/crane'
+import { useVueBaseProps } from '@lightspeed/crane'
 import { useBackgroundStyle } from '@shared/composables'
-import { createTextStyle } from '@shared/utils'
+import { useColorPresetVars } from '@shared/composables/design'
 import type { Content, Design } from './type'
 
-const { content, design } = useCraneSection<Content, Design>()
+const { content, design } = useVueBaseProps<Content, Design>()
 const backgroundStyle = useBackgroundStyle(design.background)
-const titleStyle = createTextStyle(design.title)
+const colorPresetVars = useColorPresetVars(design)
 </script>
 
 <style scoped lang="scss">
@@ -238,6 +237,7 @@ const titleStyle = createTextStyle(design.title)
   &__title {
     margin: 0 0 24px;
     text-align: center;
+    color: var(--fg-color);
   }
   
   &__image {
@@ -324,18 +324,15 @@ import { Button, SectionWrapper, Skeleton } from '@shared/components'
 
 Import from `shared/composables`:
 
-**Data Fetching:**
-- `useProducts(filter, limit)` — Load products from Ecwid API
-- `useCategories()` — Load store categories
-
 **Crane Integration:**
 - `useTranslations()` — Multi-language support
-- `useContentMapping()` — Map deck cards to typed content
+- `useMappedDeckCards()` / `field()` / `createFieldConfig()` — Map deck cards to typed content
 - `usePreviewMode()` — Detect Crane preview mode
+- `useOrderedSelectorProducts(selector, elementName)` — Read products from a PRODUCT_SELECTOR element in the merchant's chosen order
 
 **Design:**
 - `useBackgroundStyle(design)` — Generate background CSS from Crane design
-- `useButtonStyles(design)` — Generate button styles
+- `useColorPresetVars(rawDesign)` — Generate the per-section CSS color-preset variables
 
 **UI:**
 - `useCarousel()` — Carousel with keyboard navigation
@@ -346,10 +343,10 @@ Import from `shared/composables`:
 
 Import from `shared/utils`:
 
-- `getColorHex(color, fallback)` — Safe color extraction
+- `getColorHex(color)` — Safe color extraction
 - `getContrastColor(hex)` — WCAG-compliant contrast color
-- `createTextStyle(design)` — Generate text CSS from Crane design
-- `isValidImageUrl(url)` — Validate image URLs
+- `createColorPresetVars(presetId)` — Generate CSS color-preset variables
+- `isValidImageUrl(url)` / `hasValidImage(url)` — Validate image URLs
 
 ## Deployment
 
@@ -374,7 +371,7 @@ Make sure `crane.config.json` contains valid credentials:
 | `sections/featured-products/` | Loading states, error handling, API integration |
 | `sections/hero-banner/` | Simple section with background and CTA |
 | `headers/store-header/` | Complex component with mega menu |
-| `shared/composables/data/use-products.ts` | Typed API fetching |
+| `shared/composables/crane/use-ordered-selector-products.ts` | Reading products from a Crane PRODUCT_SELECTOR element |
 | `shared/components/Button.vue` | Crane design integration |
 
 ## Documentation

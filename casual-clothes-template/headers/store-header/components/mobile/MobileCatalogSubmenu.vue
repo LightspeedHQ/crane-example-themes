@@ -3,32 +3,27 @@
 		:is-open="isOpen"
 		:background-color="headerBackgroundColor"
 		:text-color="headerTextColor"
-		@close="$emit('close')"
+		:preset-vars="headerPresetVars"
+		@close="closeCatalog"
 	>
 		<div class="mobile-catalog-submenu">
-			<MobileCatalogSubmenuHeader
-				@back="$emit('close')"
-				@close-all="$emit('close-all')"
-			/>
-			<MobileCatalogSubmenuGrid
-				:category="category"
-				@close-all="$emit('close-all')"
-			/>
+			<MobileCatalogSubmenuHeader />
+			<MobileCatalogSubmenuGrid :category="category" />
 		</div>
 	</FullScreenOverlay>
 </template>
 
 <script setup lang="ts">
-import type { CatalogOverlayProps, CascadeCloseEmits } from '../../types/common'
+import type { CatalogOverlayProps } from '../../types/common'
 import { FullScreenOverlay } from '../ui/overlay'
 import MobileCatalogSubmenuHeader from './MobileCatalogSubmenuHeader.vue'
 import MobileCatalogSubmenuGrid from './MobileCatalogSubmenuGrid.vue'
-import { useHeaderDesign } from '../../composables'
+import { useHeaderDesign, useHeaderState } from '../../composables'
 
 defineProps<CatalogOverlayProps>()
-defineEmits<CascadeCloseEmits>()
 
-const { headerBackgroundColor, headerTextColor } = useHeaderDesign()
+const { closeCatalog } = useHeaderState()
+const { headerBackgroundColor, headerTextColor, headerPresetVars } = useHeaderDesign()
 </script>
 
 <style scoped lang="scss">

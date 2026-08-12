@@ -15,10 +15,23 @@ function getLuminance(r: number, g: number, b: number): number {
 }
 
 /**
- * Parse hex color to RGB
+ * Parse hex color to RGB.
+ * Supports 3-char (#rgb), 6-char (#rrggbb), and 8-char (#rrggbbaa) formats.
+ * Alpha channel is ignored for contrast calculation.
  */
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
-	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+	// Expand shorthand #rgb → #rrggbb
+	const shorthand = /^#?([a-f\d])([a-f\d])([a-f\d])$/i.exec(hex)
+	if (shorthand) {
+		return {
+			r: parseInt(shorthand[1] + shorthand[1], 16),
+			g: parseInt(shorthand[2] + shorthand[2], 16),
+			b: parseInt(shorthand[3] + shorthand[3], 16),
+		}
+	}
+
+	// 6-char or 8-char (#rrggbb or #rrggbbaa — alpha ignored)
+	const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})/i.exec(hex)
 	return result ? {
 		r: parseInt(result[1], 16),
 		g: parseInt(result[2], 16),

@@ -138,7 +138,7 @@ const viewBoxSize = computed(() => iconSizePx.value)
 	justify-content: center;
 	cursor: pointer;
 	pointer-events: auto;
-	color: #000;
+	color: var(--fg-color);
 	z-index: 10;
 	transition: background 0.2s;
 }

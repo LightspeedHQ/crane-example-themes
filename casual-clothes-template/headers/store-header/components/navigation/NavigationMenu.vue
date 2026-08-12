@@ -3,12 +3,16 @@
 		<li v-if="hasLocations">
 			<DropdownPortalMenu>
 				<template #trigger="{ isDropdownOpen }">
-					<div
+					<button
+						type="button"
 						class="navigation-menu__item navigation-menu__button"
 						:class="{ 'navigation-menu__item--active': isDropdownOpen }"
+						:aria-expanded="isDropdownOpen"
+						:aria-haspopup="true"
+						@mouseenter="maybeCloseSearchOverlay"
 					>
 						{{ locationsLinkContent.value }}
-					</div>
+					</button>
 				</template>
 				<template #content>
 					<div
@@ -21,12 +25,16 @@
 		<li v-if="hasCustomerCare">
 			<DropdownPortalMenu>
 				<template #trigger="{ isDropdownOpen }">
-					<div
+					<button
+						type="button"
 						class="navigation-menu__item navigation-menu__button"
 						:class="{ 'navigation-menu__item--active': isDropdownOpen }"
+						@mouseenter="maybeCloseSearchOverlay"
+						:aria-expanded="isDropdownOpen"
+						:aria-haspopup="true"
 					>
 						{{ customerCareTitle }}
-					</div>
+					</button>
 				</template>
 				<template #content>
 					<div
@@ -46,7 +54,7 @@
 import { useButtonElementContent, useInputboxElementContent } from '@lightspeed/crane'
 import NavigationLink from '../ui/navigation-link'
 import { Content } from '../../type'
-import { useLocations, useCustomerCare, useHeaderDesign } from '../../composables'
+import { useLocations, useCustomerCare, useHeaderDesign, useHeaderState, useHeaderViewport } from '../../composables'
 import CustomerCare from '../customer-care/CustomerCare.vue'
 import Locations from '../locations/Locations.vue'
 import { DropdownPortalMenu } from '../ui/dropdown'
@@ -58,6 +66,14 @@ const locationsLinkContent = useInputboxElementContent<Content>('HeaderLocations
 const aboutLinkContent = useButtonElementContent<Content>('HeaderAboutLink')
 
 const { headerBackgroundColor } = useHeaderDesign()
+const { isSearchOverlayOpen, closeSearchOverlay } = useHeaderState()
+const { isDesktop } = useHeaderViewport()
+
+function maybeCloseSearchOverlay() {
+	if (isSearchOverlayOpen.value && isDesktop.value) {
+		closeSearchOverlay()
+	}
+}
 
 </script>
 

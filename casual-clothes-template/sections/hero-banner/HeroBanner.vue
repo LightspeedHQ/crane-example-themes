@@ -1,13 +1,19 @@
 <template>
-	<section class="hero-banner">
+	<section class="hero-banner" :style="colorPresetVars">
 		<BannerBackground />
 		<BannerContent />
 	</section>
 </template>
 
 <script setup lang="ts">
+import { useVueBaseProps } from '@lightspeed/crane'
 import BannerContent from './components/BannerContent.vue'
 import BannerBackground from './components/BannerBackground.vue'
+import { useColorPresetVars } from '../../shared/composables/design'
+import type { Design } from './type'
+
+const { design: rawDesign } = useVueBaseProps<unknown, Design>()
+const colorPresetVars = useColorPresetVars(rawDesign)
 </script>
 
 <style scoped>

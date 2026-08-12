@@ -1,6 +1,6 @@
-import { EditorTypes, InputBoxContent, TextAreaContent, SelectBoxContent } from '@lightspeed/crane'
+import { EditorTypes } from '@lightspeed/crane'
 import { createFieldConfig, field } from '../../../shared/composables'
-import { BaseCard } from '../../../shared/types/type.ts'
+import { BaseCard, InputBoxContent, SelectBoxContent, TextAreaContent } from '../../../shared/types/type.ts'
 
 interface TestimonialCard extends BaseCard {
 	reviewedBy?: InputBoxContent;

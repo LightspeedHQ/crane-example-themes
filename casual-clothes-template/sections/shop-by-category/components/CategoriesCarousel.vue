@@ -8,21 +8,26 @@
 			aria-label="Categories carousel"
 		>
 			<div
-				v-for="cat in categories"
+				v-for="cat in categoriesWithNormalizedImages"
 				:key="cat.id"
 				class="category-card"
 				@click="openCategoryUrl(cat)"
 			>
 				<div class="category-card__image-wrapper">
 					<img
-						v-if="hasValidCategoryImage(cat)"
-						:src="cat.content?.highResolutionDesktopImage"
+						v-if="cat.imageUrl"
+						:src="cat.imageUrl"
 						alt=""
+						loading="lazy"
 						class="category-card__image"
 					/>
 				</div>
-				<p class="category-card__text" :style="textStyle">
-					{{ cat.text?.value }}
+				<p
+					v-show="categoryTextDesign?.visible !== false"
+					class="category-card__text"
+					:style="categoryTextVars"
+				>
+					{{ cat.name }}
 				</p>
 			</div>
 		</div>
@@ -44,51 +49,50 @@
 </template>
 
 <script setup lang="ts">
-import { CategoryCard } from '../types'
 import { computed, ref } from 'vue'
-import { getColorHex, openCategoryLink } from '../../../shared/utils'
-import { TextDesignDataInternal } from '../../../shared/types/type.ts'
+import { isValidImageUrl } from '../../../shared/utils'
+import { openCategoryLink } from '../../../shared/utils'
 import { useCarousel } from '../../../shared/composables'
+import { createTextVars } from '../../../shared/utils/design-vars'
 import NavigationButtons from '../../../shared/components/NavigationButtons.vue'
 
 interface Props {
-  categories: CategoryCard[]
-  categoryTextDesign?: TextDesignDataInternal
-  currentLanguage?: string
+	categories: CategoryListComponentItem[]
+	categoryTextDesign?: TextDesignData
+	rawCategoryTextDesign?: unknown
+	currentLanguage?: string
 }
 
 const props = defineProps<Props>()
 
-// Helper function to check if category image is valid
-const hasValidCategoryImage = (cat: CategoryCard): boolean => {
-	const imageUrl = cat.content?.highResolutionDesktopImage
-	return !!(imageUrl && imageUrl !== '/undefined' && imageUrl !== 'undefined' && !imageUrl.includes('undefined'))
-}
+const categoriesWithNormalizedImages = computed(() =>
+	props.categories.map((cat) => ({
+		...cat,
+		imageUrl: isValidImageUrl(cat.imageUrl),
+	})),
+)
 
-// Carousel navigation
 const carousel = ref<HTMLElement | null>(null)
 const totalItems = computed(() => props.categories.length)
-const { prevDisabled, nextDisabled, scrollCarousel, shouldShowControls, hasOverflow } = useCarousel(carousel, {
-	totalItems,
-	itemWidthMobile: 144,
-	itemWidthDesktop: 340,
-	gap: 16,
-	isInfinite: true,
-})
+const { prevDisabled, nextDisabled, scrollCarousel, shouldShowControls, hasOverflow } = useCarousel(
+	carousel,
+	{
+		totalItems,
+		itemWidthMobile: 144,
+		itemWidthDesktop: 340,
+		gap: 16,
+		isInfinite: true,
+	},
+)
 
-const textStyle = computed(() => ({
-	fontFamily: props.categoryTextDesign?.font || 'Inter',
-	fontSize: props.categoryTextDesign?.size ? `${props.categoryTextDesign.size}px` : '16px',
-	color: getColorHex(props.categoryTextDesign?.color) || '#000000',
-	fontWeight: props.categoryTextDesign?.bold ? 'bold' : 'normal',
-	fontStyle: props.categoryTextDesign?.italic ? 'italic' : 'normal',
-	lineHeight: '1.5',
-	letterSpacing: '-0.08px',
-	display: props.categoryTextDesign?.visible ? '' : 'none',
-}))
+const categoryTextVars = computed(() =>
+	Object.fromEntries(
+		createTextVars('category', props.categoryTextDesign, props.rawCategoryTextDesign),
+	),
+)
 
-const openCategoryUrl = (cat: CategoryCard) => {
-	openCategoryLink(cat.link?.value, props.currentLanguage || 'en')
+const openCategoryUrl = (cat: CategoryListComponentItem) => {
+	openCategoryLink(cat.url, props.currentLanguage || 'en')
 }
 </script>
 
@@ -131,12 +135,13 @@ const openCategoryUrl = (cat: CategoryCard) => {
 }
 
 .category-card__text {
-	font-family: 'Inter', sans-serif;
-	font-size: 16px;
-	font-weight: 400;
+	font-family: var(--category-font-family, var(--body-font-family));
+	color: var(--category-color, var(--fg-color));
+	font-size: var(--category-font-size, var(--body-2-font-size));
+	font-weight: var(--category-font-weight, var(--body-font-weight));
+	font-style: var(--category-font-style, normal);
 	line-height: 1.5;
 	letter-spacing: -0.08px;
-	color: #000000;
 	margin: 0;
 }
 

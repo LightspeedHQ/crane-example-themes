@@ -29,7 +29,7 @@ defineEmits<{
 	(e: 'select', language: Language): void
 }>()
 
-const { headerTextColor, headerFontFamily, headerFontSize } = useHeaderDesign()
+const { headerTextColor } = useHeaderDesign()
 </script>
 
 <style scoped lang="scss">
@@ -46,8 +46,8 @@ li {
 
 .language-selector-link {
   color: v-bind(headerTextColor);
-  font-family: v-bind(headerFontFamily);
-  font-size: v-bind(headerFontSize);
+  font-family: var(--header-font-family, var(--body-font-family));
+  font-size: var(--header-font-size, inherit);
   font-style: inherit;
   font-weight: inherit;
   line-height: 150%;

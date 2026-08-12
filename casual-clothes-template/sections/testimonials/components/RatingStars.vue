@@ -1,10 +1,10 @@
 <template>
 	<div class="stars-row">
-		<star-icon :percent="starsPercents[0]"></star-icon>
-		<star-icon :percent="starsPercents[1]"></star-icon>
-		<star-icon :percent="starsPercents[2]"></star-icon>
-		<star-icon :percent="starsPercents[3]"></star-icon>
-		<star-icon :percent="starsPercents[4]"></star-icon>
+		<star-icon :percent="starsPercents[0]" :index="0"></star-icon>
+		<star-icon :percent="starsPercents[1]" :index="1"></star-icon>
+		<star-icon :percent="starsPercents[2]" :index="2"></star-icon>
+		<star-icon :percent="starsPercents[3]" :index="3"></star-icon>
+		<star-icon :percent="starsPercents[4]" :index="4"></star-icon>
 	</div>
 </template>
 

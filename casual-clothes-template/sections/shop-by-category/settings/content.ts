@@ -9,4 +9,9 @@ export default {
 		label: '$label.section_description.label',
 		placeholder: '$label.section_description.placeholder',
 	},
+	shop_by_category: {
+		type: 'CATEGORY_SELECTOR',
+		label: '$label.shop_by_category.label',
+		maxCategories: 8,
+	},
 } as const

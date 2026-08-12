@@ -15,4 +15,9 @@ export default {
 			text: '$label.section_description.default',
 		},
 	},
+	featured_products: {
+		type: 'PRODUCT_SELECTOR',
+		label: '$label.featured_products.label',
+		maxProducts: 3,
+	},
 } as const

@@ -1,20 +1,24 @@
 <template>
-	<header class="promotion-highlights-3__header">
-		<h2 class="promotion-highlights-3__title" :style="titleStyle">{{ sectionTitle?.value }}</h2>
+	<header class="promotion-highlights-3__header" :style="headerVars">
+		<h2 v-show="sectionTitleDesign?.visible !== false" class="promotion-highlights-3__title">{{ sectionTitle?.value }}</h2>
 	</header>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { createTextStyle } from '../../../shared/utils'
-import { useInputboxElementContent, useTextElementDesign } from '@lightspeed/crane'
+import { useInputboxElementContent, useTextElementDesign, useVueBaseProps } from '@lightspeed/crane'
 import type { Content, Design } from '../type.ts'
+import { createTextVars } from '../../../shared/utils/design-vars'
 
+const { design: rawDesign } = useVueBaseProps<unknown, Design>()
 const sectionTitle = useInputboxElementContent<Content>('section_title')
-
 const sectionTitleDesign = useTextElementDesign<Design>('section_title') as TextDesignData
 
-const titleStyle = computed(() => createTextStyle(sectionTitleDesign, { defaultSize: 32 }))
+const headerVars = computed(() =>
+	Object.fromEntries(
+		createTextVars('highlight-title', sectionTitleDesign, rawDesign.value?.section_title),
+	),
+)
 </script>
 
 <style scoped lang="scss">
@@ -25,8 +29,11 @@ const titleStyle = computed(() => createTextStyle(sectionTitleDesign, { defaultS
   }
 
   &__title {
-    font-size: 24px;
-    font-weight: 400;
+    font-family: var(--highlight-title-font-family, var(--heading-font-family));
+    color: var(--highlight-title-color, var(--fg-color));
+    font-size: var(--highlight-title-font-size, var(--heading-2-font-size));
+    font-weight: var(--highlight-title-font-weight, var(--heading-font-weight));
+    font-style: var(--highlight-title-font-style, var(--heading-font-style));
     line-height: 1.5;
     letter-spacing: -0.12px;
   }
@@ -34,7 +41,7 @@ const titleStyle = computed(() => createTextStyle(sectionTitleDesign, { defaultS
 
 @media (min-width: 768px) {
   .promotion-highlights-3__title {
-    font-size: 32px;
+    font-size: var(--highlight-title-font-size, var(--heading-2-font-size));
     letter-spacing: -0.16px;
   }
 }

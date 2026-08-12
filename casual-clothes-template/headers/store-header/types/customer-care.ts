@@ -1,6 +1,6 @@
-import { EditorTypes, InputBoxContent } from '@lightspeed/crane'
+import { EditorTypes } from '@lightspeed/crane'
 import { createFieldConfig, field } from '../../../shared/composables'
-import { BaseCard } from '../../../shared/types/type'
+import { BaseCard, InputBoxContent } from '../../../shared/types/type'
 
 /**
  * Contact Us Info card from the ContactUsInfo DECK

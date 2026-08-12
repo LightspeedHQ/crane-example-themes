@@ -84,7 +84,7 @@ const badgeClasses = computed(() => ({
 	align-items: center;
 	justify-content: center;
 	padding: 4px 8px;
-	font-family: 'Inter', sans-serif;
+	font-family: var(--body-font-family);
 	font-weight: 500;
 	line-height: 1.2;
 	white-space: nowrap;

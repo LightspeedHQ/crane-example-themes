@@ -8,12 +8,12 @@ export default {
 		{
 			type: 'custom',
 			id: 'promotion-highlights',
-			showcase_id: '001',
+			showcase_id: '1',
 		},
 		{
 			type: 'custom',
 			id: 'shop-by-category',
-			showcase_id: '001',
+			showcase_id: '1',
 		},
 		{
 			type: 'custom',
@@ -23,7 +23,7 @@ export default {
 		{
 			type: 'custom',
 			id: 'testimonials',
-			showcase_id: '001',
+			showcase_id: '1',
 		},
 		{
 			type: 'custom',

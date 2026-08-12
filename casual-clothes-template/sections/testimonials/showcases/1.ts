@@ -72,35 +72,18 @@ export default {
 	design: {
 		section_title: {
 			type: 'TEXT',
-			font: 'inter',
-			size: 32,
-			bold: false,
-			italic: false,
-			color: '#000000',
 			visible: true,
 		},
 		reviewer_name: {
 			type: 'TEXT',
-			font: 'inter',
-			size: 18,
-			bold: true,
-			italic: false,
-			color: '#000000',
 			visible: true,
 		},
 		review_text: {
 			type: 'TEXT',
-			font: 'inter',
-			size: 16,
-			bold: false,
-			italic: false,
-			color: '#333333',
 			visible: true,
 		},
 		background: {
 			type: 'BACKGROUND',
-			style: 'COLOR',
-			color: '#FFFFFF',
 		},
 	},
 } as const

@@ -1,8 +1,8 @@
 <template>
 	<div class="mobile-catalog-submenu-header">
-		<button 
-			class="mobile-catalog-submenu-header__back-btn" 
-			@click="$emit('back')" 
+		<button
+			class="mobile-catalog-submenu-header__back-btn"
+			@click="closeCatalog"
 			:aria-label="backLabel"
 		>
 			<span class="mobile-catalog-submenu-header__back-icon" v-html="BackArrowIcon"></span>
@@ -11,7 +11,7 @@
 		<a
 			:href="searchUrl"
 			class="mobile-catalog-submenu-header__search-btn"
-			@click="$emit('close-all')"
+			@click="closeAllCatalogs"
 			:aria-label="searchLabel"
 		>
 			<span class="mobile-catalog-submenu-header__search-icon" v-html="SearchIcon"></span>
@@ -20,20 +20,17 @@
 </template>
 
 <script setup lang="ts">
-import { useHeaderTranslations, useHeaderDesign } from '../../composables'
+import { useHeaderTranslations, useHeaderDesign, useHeaderState } from '../../composables'
 import backArrowSvg from '../../assets/back-arrow.svg?raw'
 import searchIconSvg from '../../assets/search-icon.svg?raw'
 
 const BackArrowIcon = backArrowSvg
 const SearchIcon = searchIconSvg
 
-defineEmits<{
-	(e: 'back'): void
-	(e: 'close-all'): void
-}>()
+const { closeCatalog, closeAllCatalogs } = useHeaderState()
 
 const { translations, makeUrlLanguageAware } = useHeaderTranslations()
-const { headerTextColor, headerFontFamily, headerFontSize } = useHeaderDesign()
+const { headerTextColor } = useHeaderDesign()
 
 const catalogLabel = translations.catalog
 const backLabel = translations.back
@@ -94,8 +91,8 @@ const searchUrl = makeUrlLanguageAware('/products/search')
 
 .mobile-catalog-submenu-header__title {
   color: v-bind(headerTextColor);
-  font-family: v-bind(headerFontFamily);
-  font-size: v-bind(headerFontSize);
+  font-family: var(--header-font-family, var(--body-font-family));
+  font-size: inherit;
   font-style: inherit;
   font-weight: inherit;
   line-height: 24px;

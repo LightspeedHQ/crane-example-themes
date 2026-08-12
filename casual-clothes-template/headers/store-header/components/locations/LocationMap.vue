@@ -10,7 +10,7 @@
 			<div v-if="!loadedMaps[index]" class="location-map__skeleton">
 				<div class="location-map__skeleton-pulse"></div>
 			</div>
-			
+
 			<!-- Only load iframe for selected location to improve performance -->
 			<iframe
 				v-if="location.location_address?.value && (index === selectedIndex || loadedMaps[index])"
@@ -45,15 +45,12 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { translate } = useHeaderTranslations()
 
-// Track which maps have been loaded to show/hide skeleton
 const loadedMaps = ref<Record<number, boolean>>({})
 
-// Mark a map as loaded when iframe finishes loading
 const onMapLoad = (index: number) => {
 	loadedMaps.value[index] = true
 }
 
-// Reset loaded state when locations change
 watch(() => props.locations, () => {
 	loadedMaps.value = {}
 })
@@ -85,21 +82,21 @@ const getMapUrl = (address: string): string => {
   background: #f0f0f0;
   border-radius: 8px;
   overflow: hidden;
-  
+
   &__frame {
     position: absolute;
     inset: 0;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
-    
+
     &--active {
       opacity: 1;
       visibility: visible;
       z-index: 1;
     }
   }
-  
+
   &__skeleton {
     position: absolute;
     inset: 0;
@@ -109,7 +106,7 @@ const getMapUrl = (address: string): string => {
     justify-content: center;
     z-index: 2;
   }
-  
+
   &__skeleton-pulse {
     width: 60px;
     height: 60px;
@@ -118,13 +115,13 @@ const getMapUrl = (address: string): string => {
     border-radius: 50%;
     animation: spin 1s linear infinite;
   }
-  
+
   @keyframes spin {
     to {
       transform: rotate(360deg);
     }
   }
-  
+
   @media (max-width: 768px) {
     height: 350px;
   }

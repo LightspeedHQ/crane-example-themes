@@ -15,8 +15,12 @@ export default {
 				settings: {
 					buttonLink: {
 						type: 'BUTTON',
-						title: '$label.linksGroup.linkButton.title',
 						label: '$label.linksGroup.linkButton.label',
+						defaults: {
+							title: '$label.linksGroup.linkButton.title',
+							buttonType: 'HYPER_LINK',
+							link: 'https://www.example.com',
+						},
 					},
 				},
 			},
@@ -42,8 +46,12 @@ export default {
 				settings: {
 					buttonLink: {
 						type: 'BUTTON',
-						title: '$label.linksGroup.linkButton.title',
 						label: '$label.linksGroup.linkButton.label',
+						defaults: {
+							title: '$label.linksGroup.linkButton.title',
+							buttonType: 'HYPER_LINK',
+							link: 'https://www.example.com',
+						},
 					},
 				},
 			},
@@ -69,8 +77,12 @@ export default {
 				settings: {
 					buttonLink: {
 						type: 'BUTTON',
-						title: '$label.linksGroup.linkButton.title',
 						label: '$label.linksGroup.linkButton.label',
+						defaults: {
+							title: '$label.linksGroup.linkButton.title',
+							buttonType: 'HYPER_LINK',
+							link: 'https://www.example.com',
+						},
 					},
 				},
 			},
@@ -87,13 +99,21 @@ export default {
 	},
 	contactUsTelephone: {
 		type: 'BUTTON',
-		title: '$label.contactUsTelephone.default',
 		label: '$label.contactUsTelephone.label',
+		defaults: {
+			title: '$label.contactUsTelephone.default',
+			buttonType: 'TEL_LINK',
+			phone: '+1 (555) 000-0000',
+		},
 	},
 	contactUsMail: {
 		type: 'BUTTON',
-		title: '$label.contactUsMail.title',
 		label: '$label.contactUsMail.label',
+		defaults: {
+			title: '$label.contactUsMail.title',
+			buttonType: 'MAIL_LINK',
+			email: 'hello@example.com',
+		},
 	},
 	copyrightNotice:{
 		type: 'INPUTBOX',
@@ -115,8 +135,12 @@ export default {
 				settings: {
 					buttonLink: {
 						type: 'BUTTON',
-						title: '$label.legalAndTechnicalLinks.linkButton.title',
 						label: '$label.legalAndTechnicalLinks.linkButton.label',
+						defaults: {
+							title: '$label.legalAndTechnicalLinks.linkButton.title',
+							buttonType: 'HYPER_LINK',
+							link: 'https://www.example.com',
+						},
 					},
 				},
 			},
@@ -168,8 +192,5 @@ export default {
 		type: 'INPUTBOX',
 		label: '$label.footer_text.label',
 		placeholder: '$label.footer_text.placeholder',
-		validation: {
-			maxLength: 15,
-		},
 	},
 } as const

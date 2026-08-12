@@ -3,7 +3,7 @@
 		<li v-if="hasLocations" class="navigation-menu__item">
 			<button
 				class="navigation-menu__button"
-				@click="$emit('open-find-store')"
+				@click="toggleFindStore"
 			>
 				{{ locationsLinkContent.value }}
 			</button>
@@ -11,7 +11,7 @@
 		<li v-if="hasCustomerCare" class="navigation-menu__item">
 			<button
 				class="navigation-menu__button"
-				@click="$emit('open-customer-care')"
+				@click="toggleCustomerCare"
 			>
 				{{ customerCareTitle }}
 			</button>
@@ -26,12 +26,9 @@
 import { useButtonElementContent, useInputboxElementContent } from '@lightspeed/crane'
 import NavigationLink from '../ui/navigation-link'
 import { Content } from '../../type'
-import { useLocations, useCustomerCare } from '../../composables'
+import { useLocations, useCustomerCare, useHeaderState } from '../../composables'
 
-defineEmits<{
-  (e: 'open-find-store'): void
-  (e: 'open-customer-care'): void
-}>()
+const { toggleFindStore, toggleCustomerCare } = useHeaderState()
 
 const { hasLocations } = useLocations()
 const { hasCustomerCare, customerCareTitle } = useCustomerCare()

@@ -3,69 +3,6 @@
  */
 
 /**
- * Adds language prefix to URLs for multi-language stores
- *
- * Detects the current page language from the URL and adds the appropriate
- * prefix to product/category URLs. Handles various URL formats and edge cases.
- *
- * @param url - URL to add language prefix to
- * @returns URL with language prefix if needed
- *
- * @example
- * ```typescript
- * // On a French page (/fr/...)
- * addLanguagePrefix('/products/wireless-earbuds') // '/fr/products/wireless-earbuds'
- *
- * // On default language page (no prefix)
- * addLanguagePrefix('/products/wireless-earbuds') // '/products/wireless-earbuds'
- * ```
- */
-export function addLanguagePrefix(url: string | undefined): string {
-	if (!url || url === '#') return '#'
-
-	// SSR safety check
-	// eslint-disable-next-line no-restricted-globals -- SSR-safe: explicit typeof check
-	if (typeof window === 'undefined') {
-		return url
-	}
-
-	// Detect current page language from URL
-	let currentPageLanguage: string | undefined = undefined
-	// eslint-disable-next-line no-restricted-globals -- SSR-safe: guarded above
-	const path = window.location.pathname
-	const segments = path.split('/').filter(Boolean)
-	const firstSegment = segments[0]
-
-	// Check if first segment looks like a language code (2-5 chars, not 'products')
-	if (firstSegment && firstSegment.length <= 5 && firstSegment !== 'products') {
-		currentPageLanguage = firstSegment
-	}
-
-	// If no language prefix in current URL, we're on default language page
-	// Don't add prefix to links
-	if (!currentPageLanguage) {
-		return url
-	}
-
-	// We're on a non-default language page, add the prefix
-	try {
-		// eslint-disable-next-line no-restricted-globals -- SSR-safe: guarded above
-		const urlObj = new URL(url, window.location.origin)
-		if (!urlObj.pathname.startsWith(`/${currentPageLanguage}/`)) {
-			urlObj.pathname = `/${currentPageLanguage}${urlObj.pathname}`
-			return urlObj.toString()
-		}
-		return url
-	} catch {
-		// If URL is relative
-		if (url.startsWith('/') && !url.startsWith(`/${currentPageLanguage}/`)) {
-			return `/${currentPageLanguage}${url}`
-		}
-		return url
-	}
-}
-
-/**
  * Extracts the product slug from various URL formats
  * Handles full URLs, paths with language prefixes, and query params
  *
@@ -184,15 +121,13 @@ export function openProductLink(productUrl: string | undefined, language: string
 	if (typeof window === 'undefined') return
 
 	// eslint-disable-next-line no-restricted-globals -- SSR-safe: guarded above
-	const fullUrl = `${window.location.origin}${finalUrl}`
-	// eslint-disable-next-line no-restricted-globals -- SSR-safe: guarded above
-	window.location.href = fullUrl
+	window.location.href = `${window.location.origin}${finalUrl}`
 }
 
 /**
  * Extracts the category slug from various URL formats
  * Handles full URLs, paths with language prefixes, and query params
- * Supports both standard format (/products/Category-Name-c{categoryId})
+ * Supports both standard Ecwid format (/products/Category-Name-c{categoryId})
  * and custom category slugs (/products/custom-slug)
  *
  * @param url - Category URL in various formats
@@ -307,7 +242,5 @@ export function openCategoryLink(categoryUrl: string | undefined, language: stri
 	if (typeof window === 'undefined') return
 
 	// eslint-disable-next-line no-restricted-globals -- SSR-safe: guarded above
-	const fullUrl = `${window.location.origin}${finalUrl}`
-	// eslint-disable-next-line no-restricted-globals -- SSR-safe: guarded above
-	window.location.href = fullUrl
+	window.location.href = `${window.location.origin}${finalUrl}`
 }

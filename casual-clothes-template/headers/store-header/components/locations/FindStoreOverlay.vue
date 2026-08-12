@@ -1,34 +1,42 @@
 <template>
 	<div>
 		<FindStoreSubmenu
-			v-if="isOpen && !isMobile"
+			v-if="hasBeenOpened && !isMobile"
+			v-show="isOpen"
 			:is-open="isOpen"
-			@close="$emit('close')"
 		/>
 
 		<MobileFindStoreSubmenu
-			v-if="isMobile && isOpen"
+			v-if="hasBeenOpened && isMobile"
+			v-show="isOpen"
 			:is-open="isOpen"
-			@close="$emit('close')"
-			@close-all="$emit('close-all')"
 		/>
 	</div>
 </template>
 
 <script setup lang="ts">
+import { ref, watch } from 'vue'
 import FindStoreSubmenu from './FindStoreSubmenu.vue'
 import MobileFindStoreSubmenu from '../mobile/MobileFindStoreSubmenu.vue'
-import type { OverlayProps, CascadeCloseEmits } from '../../types/common'
-import { useHeaderViewport, useEscapeKey } from '../../composables'
+import type { OverlayProps } from '../../types/common'
+import { useHeaderViewport, useEscapeKey, useHeaderState } from '../../composables'
 
 const props = defineProps<OverlayProps>()
-const emit = defineEmits<CascadeCloseEmits>()
 
 const { isMobile } = useHeaderViewport()
+const { closeFindStore } = useHeaderState()
 
-// Handle Escape key to close overlay
+const hasBeenOpened = ref(false)
+watch(
+	() => props.isOpen,
+	(val) => {
+		if (val) hasBeenOpened.value = true
+	},
+	{ immediate: true },
+)
+
 useEscapeKey(
-	() => emit('close'),
+	() => closeFindStore(),
 	() => props.isOpen,
 )
 </script>

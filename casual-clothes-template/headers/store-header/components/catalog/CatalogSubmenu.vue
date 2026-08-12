@@ -1,7 +1,7 @@
 <template>
-	<Teleport to="body">
-		<div v-if="isOpen">
-			<div class="catalog-submenu-overlay" @click="$emit('close')" />
+	<Teleport to="body" v-if="isMounted">
+		<div v-if="isOpen" :style="headerPresetVars">
+			<div class="catalog-submenu-overlay" @click="closeCatalog" />
 			<div
 				class="catalog-submenu-overlay__content"
 				:style="{ top: catalogSubmenuTopOffset }"
@@ -14,7 +14,7 @@
 							<a
 								:href="visibleSubcategories[index - 1].urlPath || '#'"
 								:class="['catalog-submenu__header', 'catalog-submenu__header--link']"
-								@click="$emit('close')">
+								@click="closeCatalog">
 								{{ visibleSubcategories[index - 1].name }}
 							</a>
 
@@ -24,7 +24,7 @@
 									:key="productCategory.id"
 									:href="productCategory.urlPath || '#'"
 									class="catalog-submenu__item"
-									@click="$emit('close')">
+									@click="closeCatalog">
 									{{ productCategory.name }}
 								</a>
 							</div>
@@ -34,7 +34,7 @@
 
 					<!-- Promo Banner Column (always in 5th position) -->
 					<div class="catalog-submenu__column catalog-submenu__column--promo">
-						<CatalogPromoBanner @close="$emit('close')" />
+						<CatalogPromoBanner />
 					</div>
 				</div>
 			</div>
@@ -44,31 +44,34 @@
 
 <script setup lang="ts">
 import { toRef } from 'vue'
-import type { CatalogOverlayProps, CloseEmits } from '../../types'
-import { useVisibleSubcategories, useEscapeKey, useHeaderDesign, useSubmenuPosition, useHeaderViewport } from '../../composables'
+import { useMounted } from '@vueuse/core'
+import type { CatalogOverlayProps } from '../../types'
+import { useVisibleSubcategories, useEscapeKey, useHeaderDesign, useSubmenuPosition, useHeaderViewport, useHeaderState } from '../../composables'
 import CatalogPromoBanner from './CatalogPromoBanner.vue'
 
 const props = defineProps<CatalogOverlayProps>()
-const emit = defineEmits<CloseEmits>()
+
+const isMounted = useMounted()
 
 // SSR-safe viewport detection
 const { isDesktop } = useHeaderViewport()
+const { closeCatalog } = useHeaderState()
 
 const onMouseLeave = () => {
 	if (isDesktop.value) {
-		emit('close')
+		closeCatalog()
 	}
 }
 
 const visibleSubcategories = useVisibleSubcategories(toRef(props, 'category'))
-const { headerBackgroundColor, headerTextColor, headerFontFamily, headerFontSize } = useHeaderDesign()
+const { headerBackgroundColor, headerTextColor, headerPresetVars } = useHeaderDesign()
 
 // Calculate submenu position dynamically
 const { submenuTopOffset: catalogSubmenuTopOffset } = useSubmenuPosition(() => props.isOpen)
 
 // Handle Escape key to close submenu
 useEscapeKey(
-	() => emit('close'),
+	() => closeCatalog(),
 	() => props.isOpen,
 )
 </script>
@@ -126,8 +129,8 @@ useEscapeKey(
 
 .catalog-submenu__header {
   color: v-bind(headerTextColor);
-  font-family: v-bind(headerFontFamily);
-  font-size: v-bind(headerFontSize);
+  font-family: var(--header-font-family, var(--body-font-family));
+  font-size: inherit;
   font-style: inherit;
   font-weight: 700;
   /* Intentionally bold for category headers */
@@ -172,8 +175,8 @@ useEscapeKey(
 
 .catalog-submenu__item {
   color: v-bind(headerTextColor);
-  font-family: v-bind(headerFontFamily);
-  font-size: v-bind(headerFontSize);
+  font-family: var(--header-font-family, var(--body-font-family));
+  font-size: inherit;
   font-style: inherit;
   font-weight: inherit;
   line-height: 150%;

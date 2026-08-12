@@ -1,6 +1,6 @@
-import { EditorTypes, ImageContent, InputBoxContent } from '@lightspeed/crane'
+import { EditorTypes } from '@lightspeed/crane'
 import { createFieldConfig, field } from '../../../shared/composables'
-import { BaseCard } from '../../../shared/types/type.ts'
+import { BaseCard, ImageContent, InputBoxContent } from '../../../shared/types/type.ts'
 
 export interface GalleryItemCard extends BaseCard {
 	image?: ImageContent

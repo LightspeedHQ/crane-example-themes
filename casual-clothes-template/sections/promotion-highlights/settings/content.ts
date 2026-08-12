@@ -18,6 +18,10 @@ export default {
 	view_all_button: {
 		type: 'BUTTON',
 		label: '$label.view_all_button.label',
-		description: '$label.view_all_button.description',
+	},
+	promotion_products: {
+		type: 'PRODUCT_SELECTOR',
+		label: '$label.promotion_products.label',
+		maxProducts: 8,
 	},
 } as const

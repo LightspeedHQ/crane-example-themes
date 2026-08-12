@@ -3,9 +3,7 @@
 		<div class="header-bottom-row__left">
 			<Categories
 				v-if="categoriesShow.enabled"
-				:active-category="activeCategory"
-				@open-catalog="$emit('open-catalog', $event)"
-				@close-catalog="$emit('close-catalog')"
+				:active-category="selectedCategory"
 			/>
 		</div>
 		<div class="header-bottom-row__right">
@@ -18,12 +16,9 @@
 import { computed } from 'vue'
 import Categories from '../navigation/Categories.vue'
 import Search from '../user/Search.vue'
-import type { ActiveCategoryProps, OpenCatalogEmits } from '../../types/common'
-import { useHeaderToggles } from '../../composables'
+import { useHeaderToggles, useHeaderState } from '../../composables'
 
-defineProps<ActiveCategoryProps>()
-defineEmits<OpenCatalogEmits & { (e: 'close-catalog'): void }>()
-
+const { selectedCategory } = useHeaderState()
 const { searchShow, categoriesShow } = useHeaderToggles()
 
 const hasBottomRowContent = computed(() => {
@@ -32,14 +27,16 @@ const hasBottomRowContent = computed(() => {
 </script>
 
 <style scoped lang="scss">
+@use '../../constants' as c;
+
 .header-bottom-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 40px;
+  height: c.$HEADER_ROW_HEIGHT;
   /* Inherit background from parent header */
   gap: 1rem;
-  min-height: 40px;
+  min-height: c.$HEADER_ROW_HEIGHT;
 }
 
 .header-bottom-row__left {

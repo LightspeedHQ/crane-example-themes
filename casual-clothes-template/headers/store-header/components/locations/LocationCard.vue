@@ -36,13 +36,6 @@ import type { LocationCard } from '../../types/locations'
 interface Props {
   location: LocationCard
   viewOnMapText: string
-  textColor: string
-  textFont: string
-  textSize: number
-  textWeight: string
-  textStyle: string
-  linkColor: string
-  linkFont: string
   isSelected?: boolean
 }
 
@@ -104,11 +97,11 @@ const getCallAriaLabel = (): string => {
   align-self: stretch;
 
   &__name {
-    color: v-bind(textColor);
+    color: inherit;
     font-feature-settings: 'liga' off, 'clig' off;
-    font-family: v-bind(textFont);
-    font-size: v-bind('`${textSize}px`');
-    font-style: v-bind(textStyle);
+    font-family: var(--header-font-family, var(--body-font-family));
+    font-size: inherit;
+    font-style: inherit;
     font-weight: v-bind('isSelected ? "800" : "700"');
     line-height: 150%;
     margin: 0;
@@ -116,25 +109,25 @@ const getCallAriaLabel = (): string => {
   }
 
   &__address {
-    color: v-bind(textColor);
+    color: inherit;
     font-feature-settings: 'liga' off, 'clig' off;
-    font-family: v-bind(textFont);
-    font-size: v-bind('`${textSize}px`');
-    font-style: v-bind(textStyle);
-    font-weight: v-bind(textWeight);
+    font-family: var(--header-font-family, var(--body-font-family));
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
     line-height: 150%;
     white-space: pre-line
   }
 
   &__map-link {
-    color: v-bind(linkColor);
+    color: inherit;
     text-decoration: underline;
     display: inline-block;
     margin-top: 4px;
-    font-family: v-bind(linkFont);
-    font-size: v-bind('`${textSize}px`');
-    font-style: v-bind(textStyle);
-    font-weight: v-bind(textWeight);
+    font-family: var(--header-font-family, var(--body-font-family));
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
     line-height: 150%;
     cursor: pointer;
     transition: opacity 0.2s ease;
@@ -154,12 +147,12 @@ const getCallAriaLabel = (): string => {
   }
 
   &__phone {
-    color: v-bind(textColor);
+    color: inherit;
     font-feature-settings: 'liga' off, 'clig' off;
-    font-family: v-bind(textFont);
-    font-size: v-bind('`${textSize}px`');
-    font-style: v-bind(textStyle);
-    font-weight: v-bind(textWeight);
+    font-family: var(--header-font-family, var(--body-font-family));
+    font-size: inherit;
+    font-style: inherit;
+    font-weight: inherit;
     line-height: 150%;
   }
 
@@ -186,7 +179,7 @@ const getCallAriaLabel = (): string => {
   &__separator {
     width: 100%;
     height: 1px;
-    background-color: v-bind(textColor);
+    background-color: currentColor;
     opacity: 0.16;
   }
 }

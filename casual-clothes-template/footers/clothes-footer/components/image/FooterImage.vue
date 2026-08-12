@@ -1,23 +1,26 @@
 <template>
 	<div class="image-container" v-if="shouldShowSection">
-		<img v-if="hasImage" :src="footerData?.footerImage?.highResolutionDesktopImage" alt="footer image">
-		<div :style="linkStyle" class="footer-text">{{ footerData?.footerText?.value }}</div>
+		<img
+			v-if="hasImage"
+			:src="footerData?.footerImage?.highResolutionDesktopImage"
+			alt="footer image"
+		/>
+		<div class="footer-text" :style="footerTextVars">{{ footerData?.footerText?.value }}</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { computed, inject } from 'vue'
 import { footerDesignKey, footerImageKey } from '../../types/type.ts'
-import { createTextStyle } from '../../../../shared/utils'
+import { createTextVars } from '../../../../shared/utils/design-vars'
+import { hasValidImageContent } from '../../../../shared/utils'
 
 const footerData = inject(footerImageKey)
-
 const siteDesign = inject(footerDesignKey)
 
-const hasImage = computed(() => {
-	const imageUrl = footerData?.footerImage?.highResolutionDesktopImage
-	return imageUrl && imageUrl !== 'undefined' && imageUrl !== '/undefined' && !imageUrl.includes('undefined')
-})
+const hasImage = computed(
+	() => footerData?.footerImage.hasContent && hasValidImageContent(footerData?.footerImage),
+)
 
 const hasText = computed(() => {
 	return footerData?.footerText?.value && siteDesign?.footerTextDesign?.visible
@@ -25,54 +28,60 @@ const hasText = computed(() => {
 
 const shouldShowSection = computed(() => hasImage.value || hasText.value)
 
-// Use createTextStyle but override fontSize since it uses vw units via v-bind
-const linkStyle = computed(() => {
-	const baseStyle = createTextStyle(siteDesign?.footerTextDesign)
-	// Remove fontSize as it's handled separately via v-bind(footerTextSize)
-	const { fontSize: _fontSize, ...styleWithoutFontSize } = baseStyle
-	return styleWithoutFontSize
-})
+const footerTextVars = computed(() =>
+	Object.fromEntries(
+		createTextVars(
+			'footer-caption',
+			siteDesign?.footerTextDesign,
+			siteDesign?.rawFooterText?.value,
+		),
+	),
+)
 
-const footerTextSize = computed(() => siteDesign?.footerTextDesign.size
-	? `${siteDesign?.footerTextDesign.size}vw` : '10vw')
+const footerTextSize = computed(() =>
+	siteDesign?.footerTextDesign.size ? `${siteDesign?.footerTextDesign.size}vw` : '10vw',
+)
 </script>
 
 <style scoped>
 .image-container {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 4;
-  max-height: 228px;
-  overflow: hidden;
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 4;
+	max-height: 228px;
+	overflow: hidden;
+	background: var(--footer-background, var(--bg-color));
 }
 
 img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: top;
 }
 
 .footer-text {
-  position: absolute;
-  bottom: 2px;
-  left: 0;
-  width: 100%;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  text-align: center;
-  box-sizing: border-box;
+	position: absolute;
+	bottom: 2px;
+	left: 0;
+	width: 100%;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	text-align: center;
+	box-sizing: border-box;
 
-  font-size: v-bind(footerTextSize);
+	font-family: var(--footer-caption-font-family, var(--body-font-family));
+	color: var(--footer-caption-color, #eee);
+	font-weight: var(--footer-caption-font-weight, var(--body-font-weight));
+	font-style: var(--footer-caption-font-style, var(--body-font-style));
+	font-size: v-bind(footerTextSize);
 
-  font-style: normal;
-  font-weight: 400;
-  line-height: 56%;
-  letter-spacing: -0.8px;
-  text-transform: uppercase;
+	line-height: 56%;
+	letter-spacing: -0.8px;
+	text-transform: uppercase;
 
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 </style>

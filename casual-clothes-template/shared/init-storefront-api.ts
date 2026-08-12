@@ -1,19 +1,28 @@
-import { useInstantsiteJsApi } from '@lightspeed/crane'
-import { initStorefrontApi } from '@lightspeed/ecom-headless'
+import {
+	initStorefrontApi,
+	getAppPublicToken,
+	getStoreId,
+} from '@lightspeed/ecom-headless'
 
-import { STORE_CONFIG } from './config'
+import { ECWID_CONFIG } from './config'
 
+/**
+ * Initialize the Storefront API using the Ecwid JS API (window.Ecwid).
+ * Uses getAppPublicToken and getStoreId from ecom-headless, which wait for
+ * the Storefront JS API to be ready (OnAPILoaded) — no custom retry needed.
+ */
 export async function useInitStorefrontApi() {
-	const publicToken = useInstantsiteJsApi()?.getAppPublicToken(STORE_CONFIG.clientId) ?? ''
-	const storeId = useInstantsiteJsApi()?.getSiteId()
+	const publicToken = (await getAppPublicToken(ECWID_CONFIG.clientId)) ?? ''
+	const storeId = await getStoreId()
+
 	await initStorefrontApi({
 		publicToken,
 		storeId,
-		...(STORE_CONFIG.baseURL ? { baseURL: STORE_CONFIG.baseURL } : {}),
+		...(ECWID_CONFIG.baseURL ? { baseURL: ECWID_CONFIG.baseURL } : {}),
 	})
 
 	return {
 		publicToken,
-		storeId,
+		storeId: storeId?.toString(),
 	}
 }
