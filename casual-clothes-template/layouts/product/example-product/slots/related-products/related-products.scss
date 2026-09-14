@@ -1,0 +1,61 @@
+.related-products {
+	width: 100%;
+	padding: 64px 16px;
+	background: var(--related-products-background, var(--bg-color, #fff));
+	color: var(--fg-color, #191919);
+	font-family: var(--body-font-family, var(--global-body-font-family-stack, Arial, sans-serif));
+}
+
+.related-products__shell {
+	width: 100%;
+	max-width: min(1408px, var(--max-content-width, 1408px));
+	margin: 0 auto;
+}
+
+.related-products__header {
+	display: flex;
+	min-width: 0;
+	margin-bottom: 32px;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.related-products__title,
+.related-products__subtitle {
+	margin: 0;
+}
+
+.related-products__title {
+	color: var(--related-products-title-color, var(--fg-color, #191919));
+	font-family: var(--related-products-title-font-family, var(--heading-font-family, inherit));
+	font-size: var(--related-products-title-font-size, var(--heading-1-font-size, 32px));
+	font-style: var(--related-products-title-font-style, normal);
+	font-weight: var(--related-products-title-font-weight, var(--heading-font-weight, 400));
+	letter-spacing: -0.16px;
+	line-height: 1.5;
+}
+
+.related-products__subtitle {
+	color: var(--related-products-subtitle-color, var(--fg-color, #191919));
+	font-family: var(--related-products-subtitle-font-family, var(--body-font-family, inherit));
+	font-size: var(--related-products-subtitle-font-size, var(--body-2-font-size, 16px));
+	font-style: var(--related-products-subtitle-font-style, normal);
+	font-weight: var(--related-products-subtitle-font-weight, var(--body-font-weight, 400));
+	letter-spacing: -0.08px;
+	line-height: 1.5;
+}
+
+@media (max-width: 767px) {
+	.related-products {
+		padding-block: 48px;
+	}
+
+	.related-products__header {
+		gap: 12px;
+	}
+
+	.related-products__title {
+		font-size: var(--related-products-title-font-size, 28px);
+		line-height: 1.35;
+	}
+}
