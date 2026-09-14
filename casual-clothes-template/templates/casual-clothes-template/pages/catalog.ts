@@ -4,7 +4,7 @@ export default {
 	sections: [
 		{
 			type: 'store',
-			id: undefined,
+			id: 'example-catalog',
 		},
 	],
 } satisfies StorePageConfiguration
